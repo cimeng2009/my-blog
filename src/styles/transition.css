@@ -7,40 +7,40 @@
    -------------------------------------------------------------------------- */
 
 /* Main Content Transition */
-.transition-main {
+.transition-swup-main {
     transition:
         opacity 350ms cubic-bezier(0.4, 0, 0.2, 1),
         transform 350ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Leaving Animation */
-.transition-leaving {
+.transition-swup-leaving {
     transition:
         opacity 250ms cubic-bezier(0.4, 0, 1, 1),
         transform 250ms cubic-bezier(0.4, 0, 1, 1);
 }
 
 /* State: Changing (Swup) */
-html.is-changing .transition-main {
+html.is-changing .transition-swup-main {
     transition:
         opacity 350ms cubic-bezier(0.4, 0, 0.2, 1),
         transform 350ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-html.is-leaving .transition-main {
+html.is-leaving .transition-swup-main {
     transition:
         opacity 250ms cubic-bezier(0.4, 0, 1, 1),
         transform 250ms cubic-bezier(0.4, 0, 1, 1);
 }
 
 /* State: Animating (Entering) */
-html.is-animating .transition-main {
+html.is-animating .transition-swup-main {
     opacity: 0;
     transform: translateY(0.5rem);
 }
 
 /* State: Leaving */
-html.is-animating.is-leaving .transition-leaving {
+html.is-animating.is-leaving .transition-swup-leaving {
     transform: translateY(-0.5rem);
     opacity: 0;
 }
