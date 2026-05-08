@@ -2,7 +2,7 @@
 import { Picture } from "astro:assets";
 import * as path from "node:path";
 import type { ImageMetadata } from "astro";
-import { Icon } from "astro-icon/components";
+import Icon from "@components/common/Icon.astro";
 import LightDarkSwitch from "@/components/controls/LightDarkSwitch.svelte";
 import { navBarConfig, siteConfig } from "@/config";
 import { LinkPresets } from "@/constants/link-presets";
@@ -307,8 +307,15 @@ function initHoverSlider() {
     });
 
     _navContainer.addEventListener('mouseleave', () => {
-        const hasActive = _navContainer.querySelector('.nav-item-active');
-        if (!hasActive) {
+        const activeItem = _navContainer.querySelector('.nav-item-active') as HTMLElement | null;
+        if (activeItem) {
+            const rect = activeItem.getBoundingClientRect();
+            const containerRect = _navContainer.getBoundingClientRect();
+            _hoverBorder.style.width = `${rect.width}px`;
+            _hoverBorder.style.height = `${rect.height}px`;
+            _hoverBorder.style.left = `${rect.left - containerRect.left}px`;
+            _hoverBorder.style.top = `${(containerRect.height - rect.height) / 2}px`;
+        } else {
             _hoverBorder.style.opacity = '0';
         }
     });

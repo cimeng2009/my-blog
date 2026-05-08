@@ -89,14 +89,7 @@ export default defineConfig({
 			},
 		}),
 		icon({
-			include: {
-				"material-symbols": ["*"],
-				"fa7-brands": ["*"],
-				"fa7-regular": ["*"],
-				"fa7-solid": ["*"],
-				"simple-icons": ["*"],
-				mdi: ["*"],
-			},
+			// 不使用 include，让 astro-icon 自动从 Iconify 包加载图标
 		}),
 		expressiveCode({
 			themes: [expressiveCodeConfig.darkTheme, expressiveCodeConfig.lightTheme],

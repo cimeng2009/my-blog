@@ -49,11 +49,11 @@ export const commentConfig: CommentConfig = {
 		// 设置 Giscus 评论系统仓库
 		repo: "MmzMing/my-blog",
 		// 设置 Giscus 评论系统仓库ID
-		repoId: "R_kgDOSVxkkQ",
+		repoId: "R_kgDOSXWjBQ",
 		// 设置 Giscus 评论系统分类
 		category: "General",
 		// 获取 Giscus 评论系统分类ID
-		categoryId: "DIC_kwDOSVxkkc4C8eM8",
+		categoryId: "DIC_kwDOSXWjBc4C8jP5",
 		// 获取 Giscus 评论系统映射方式
 		mapping: "pathname",
 		// 获取 Giscus 评论系统严格模式
@@ -63,7 +63,7 @@ export const commentConfig: CommentConfig = {
 		// 获取 Giscus 评论系统元数据功能
 		emitMetadata: "0",
 		// 获取 Giscus 评论系统输入位置
-		inputPosition: "bottom",
+		inputPosition: "top",
 		// 获取 Giscus 评论系统语言
 		lang: "zh-CN",
 		// 获取 Giscus 评论系统加载方式

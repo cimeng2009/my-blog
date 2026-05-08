@@ -6,58 +6,52 @@ if (!commentConfig?.giscus) {
 }
 
 const giscus = commentConfig.giscus;
-const lightTheme = "light";
-const darkTheme = "dark";
 ---
 
-<script is:inline type="module" src="https://esm.sh/giscus"></script>
+<!-- Giscus 评论容器 -->
+<div class="giscus"></div>
 
-<!-- 
-  Giscus 官方Web Component用法，兼容Astro静态输出，无需import包，无需NPM依赖！
-  参考：https://giscus.app/ 详情配置说明
--->
-<giscus-widget
-  id="comments"
-  repo={giscus.repo}
-  repoId={giscus.repoId}
-  category={giscus.category}
-  categoryId={giscus.categoryId}
-  mapping={giscus.mapping}
-  strict={giscus.strict}
-  reactionsEnabled={giscus.reactionsEnabled}
-  emitMetadata={giscus.emitMetadata}
-  inputPosition={giscus.inputPosition}
-  theme={lightTheme}
-  lang={giscus.lang}
-  loading={giscus.loading}
-/>
+<script is:inline define:vars={{ giscus }}>
+  function loadGiscus() {
+    var container = document.querySelector('.giscus');
+    if (!container) return;
+    // 清除旧内容
+    container.innerHTML = '';
 
-<script is:inline define:vars={{ lightTheme, darkTheme }}>
-  function updateGiscusTheme() {
-    const isDark = document.documentElement.classList.contains('dark');
-    const theme = isDark ? darkTheme : lightTheme;
-    const widget = document.querySelector('giscus-widget');
-    if (widget) {
-      widget.setAttribute('theme', theme);
-    }
+    var s = document.createElement('script');
+    s.src = 'https://giscus.app/client.js';
+    s.setAttribute('data-repo', giscus.repo);
+    s.setAttribute('data-repo-id', giscus.repoId);
+    s.setAttribute('data-category', giscus.category);
+    s.setAttribute('data-category-id', giscus.categoryId);
+    s.setAttribute('data-mapping', giscus.mapping);
+    s.setAttribute('data-strict', giscus.strict);
+    s.setAttribute('data-reactions-enabled', giscus.reactionsEnabled);
+    s.setAttribute('data-emit-metadata', giscus.emitMetadata);
+    s.setAttribute('data-input-position', giscus.inputPosition);
+    s.setAttribute('data-theme', 'preferred_color_scheme');
+    s.setAttribute('data-lang', giscus.lang);
+    s.setAttribute('data-loading', giscus.loading);
+    s.crossOrigin = 'anonymous';
+    s.async = true;
+    container.appendChild(s);
   }
 
-  // Initial update
-  updateGiscusTheme();
+  // 页面首次加载
+  loadGiscus();
 
-  // Clean up previous observer if exists
-  if (window.giscusThemeObserver) {
-    window.giscusThemeObserver.disconnect();
-  }
-
-  // Create new observer
-  window.giscusThemeObserver = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-        updateGiscusTheme();
+  // Swup 页面切换后重新加载
+  if (window.swup && window.swup.hooks) {
+    window.swup.hooks.on('content:replace', function () {
+      setTimeout(loadGiscus, 200);
+    });
+  } else {
+    document.addEventListener('swup:enable', function () {
+      if (window.swup && window.swup.hooks) {
+        window.swup.hooks.on('content:replace', function () {
+          setTimeout(loadGiscus, 200);
+        });
       }
     });
-  });
-
-  window.giscusThemeObserver.observe(document.documentElement, { attributes: true });
+  }
 </script>
