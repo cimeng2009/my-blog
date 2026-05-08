@@ -1,7 +1,7 @@
 ---
 title: JVM
 published: 2026-02-28
-description: -
+description: JVM
 tags: [JAVA, JVM]
 category: 面试
 draft: false
