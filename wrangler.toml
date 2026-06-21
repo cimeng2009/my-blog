@@ -1,5 +1,5 @@
 name = "my-blog"
-compatibility_date = "2026-05-07" # 更为今日
+compatibility_date = "2026-06-21" # 更为今日
 main = "src/worker.js"
 
 [assets]
