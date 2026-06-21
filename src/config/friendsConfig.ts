@@ -22,15 +22,15 @@ export const friendsPageConfig: FriendsPageConfig = {
 	// 友链申请链接，填写后会在友链页面显示申请按钮
 	// 使用模板参数直接跳转到友链申请模板
 	applyLink:
-		"https://github.com/MmzMing/my-blog/issues/new?template=friend-link.yml",
+		"https://github.com/fqzlr/my-blog/issues/new?template=friend-link.yml",
 
 	// 本站信息，用于友链申请指南弹窗中的站点信息展示
 	siteInfo: {
-		name: "MmzMing的知识库",
-		desc: "哈基米，南北绿豆",
-		url: "https://tblog.mmzhiku.xyz",
-		avatar: "https://i.stardots.io/784774835/StarDots-2026052116374135506.jpg",
-		email: "784774835@qq.com",
+		name: "fqzlr",
+		desc: "躬身入局，心为主理，行有尺度，自持本心",
+		url: "https://fqzlr.com",
+		avatar: "https://q1.qlogo.cn/g?b=qq&nk=20447289&s=640",
+		email: "20447289@qq.com",
 	},
 
 	// 注意事项，用于友链申请指南弹窗中的注意事项展示
