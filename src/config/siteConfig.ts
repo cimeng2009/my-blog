@@ -181,6 +181,26 @@ export const siteConfig: SiteConfig = {
 		stats: true,
 		// 日历页面开关
 		calendar: true,
+		// 番剧页面开关
+		bangumi: true,
+		// 书架页面开关
+		books: true,
+		// 影视游戏页面开关
+		moviesGames: true,
+		// 音乐页面开关
+		musicPage: true,
+		// 更新日志页面开关
+		changelog: true,
+		// 动态页面开关
+		moments: true,
+		// 后台管理页面开关
+		admin: true,
+		// 日常规划页面开关
+		lifeRoutines: true,
+		// 旅行足迹页面开关
+		lifePlaces: true,
+		// 笔记本页面开关
+		lifeNotebooks: true,
 	},
 
 	// 分类导航栏开关，在首页和归档页顶部显示分类快捷导航
