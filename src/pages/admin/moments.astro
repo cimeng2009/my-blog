@@ -89,6 +89,13 @@ import { externalMomentsConfig } from "@/config/externalMomentsConfig";
       --shadow-md: 0 4px 6px -1px oklch(0 0 0 / 0.4), 0 2px 4px -2px oklch(0 0 0 / 0.3);
       --shadow-lg: 0 10px 15px -3px oklch(0 0 0 / 0.4), 0 4px 6px -4px oklch(0 0 0 / 0.3);
     }
+    /* ===== Embed 模式（在父页面iframe中使用）===== */
+    body.embed-mode .navbar { display: none !important; }
+    body.embed-mode .dark-fab { display: none !important; }
+    body.embed-mode #token-card { display: none !important; }
+    body.embed-mode .status-bar { display: none !important; }
+    body.embed-mode .container { padding-top: 0; max-width: 100%; }
+    body.embed-mode { background: var(--bg-body); }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { height: 100%; }
     body {
@@ -507,6 +514,12 @@ import { externalMomentsConfig } from "@/config/externalMomentsConfig";
     data-gist={externalMomentsConfig.gistId || ""}
     data-file={externalMomentsConfig.fileName || "moments.json"}>
     var _script = document.currentScript;
+    // 检测是否在 iframe (embed模式) 中运行
+    var isEmbed = new URLSearchParams(window.location.search).get('embed') === '1' || window.self !== window.top;
+    if (isEmbed) {
+      document.body.classList.add('embed-mode');
+      // embed模式下通过postMessage与父页面通信，不自行处理退出登录
+    }
     var ENV_TOKEN = _script.getAttribute("data-token") || "";
     var TOKEN = localStorage.getItem("gh_moments_token") || ENV_TOKEN || "";
     var GIST_ID = _script.getAttribute("data-gist") || "";
@@ -534,7 +547,11 @@ import { externalMomentsConfig } from "@/config/externalMomentsConfig";
     // ===== 退出 =====
     function doLogout() {
       sessionStorage.removeItem("admin_auth");
-      window.location.href = "/admin/";
+      if (isEmbed) {
+        window.parent.postMessage({ type: 'admin-logout' }, '*');
+      } else {
+        window.location.href = "/admin/";
+      }
     }
 
     // ===== Token 验证 =====

@@ -748,7 +748,93 @@ import { siteConfig } from "@/config/siteConfig";
     .page-section { display: none; }
     .page-section.active { display: block; }
 
+    /* Iframe sections - 填满内容区 */
+    .section-frame {
+      height: calc(100vh - var(--topbar-height) - 48px);
+      margin: -24px;
+      border: none;
+      width: calc(100% + 48px);
+      background: var(--bg-body);
+    }
+
     .hidden { display: none !important; }
+
+    /* 设置表单 */
+    .settings-card {
+      background: var(--bg);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .settings-card h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .settings-card p {
+      font-size: 13px;
+      color: var(--text-tertiary);
+      margin-bottom: 16px;
+    }
+    .form-row {
+      display: flex;
+      gap: 8px;
+    }
+    .form-input {
+      flex: 1;
+      height: 38px;
+      padding: 0 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 14px;
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      transition: var(--transition);
+      font-family: inherit;
+    }
+    .form-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+    .form-input::placeholder { color: var(--text-muted); }
+    .settings-tip {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--text-tertiary);
+      line-height: 1.6;
+    }
+    .settings-tip a { color: var(--primary); text-decoration: underline; }
+    .token-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      margin-left: 8px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 500;
+    }
+    .token-status.set { background: var(--success-bg); color: var(--success); }
+    .token-status.unset { background: var(--warning-bg); color: var(--warning); }
+    .password-hint {
+      margin-top: 16px;
+      padding: 12px 16px;
+      background: var(--info-bg);
+      border-radius: var(--radius);
+      font-size: 12px;
+      color: var(--info);
+      line-height: 1.6;
+    }
+    .password-hint code {
+      background: var(--bg-active);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-family: "SF Mono", "Fira Code", monospace;
+      font-size: 12px;
+    }
 
     /* Icon SVGs sizing */
     .ico { width: 20px; height: 20px; }
@@ -765,6 +851,7 @@ import { siteConfig } from "@/config/siteConfig";
       .sidebar-overlay.open { display: block; }
       .main { margin-left: 0; }
       .content { padding: 16px; }
+      .section-frame { margin: -16px; width: calc(100% + 32px); height: calc(100vh - var(--topbar-height) - 32px); }
       .topbar { padding: 0 16px; }
       .menu-toggle { display: flex; }
       .stats-row { grid-template-columns: repeat(2, 1fr); gap: 12px; }
@@ -773,6 +860,8 @@ import { siteConfig } from "@/config/siteConfig";
       .cards-grid { grid-template-columns: 1fr; }
       .login-box { padding: 28px 24px; }
       .topbar-title small { display: none; }
+      .form-row { flex-wrap: wrap; }
+      .form-row .btn-sm { flex: 1; }
     }
 
     @media (max-width: 480px) {
@@ -853,25 +942,25 @@ import { siteConfig } from "@/config/siteConfig";
             </span>
             <span>博客文章</span>
           </a>
-          <a class="nav-link" href="/admin/moments/" data-no-swup>
+          <a class="nav-link" href="#moments" onclick="showSection('moments', this)">
             <span class="nav-link-icon">
               <svg xmlns="http://www.w3.org/2000/svg" class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             </span>
             <span>说说动态</span>
           </a>
-          <a class="nav-link" href="/admin/notebooks/" data-no-swup>
+          <a class="nav-link" href="#notebooks" onclick="showSection('notebooks', this)">
             <span class="nav-link-icon">
               <svg xmlns="http://www.w3.org/2000/svg" class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
             </span>
             <span>笔记管理</span>
           </a>
-          <a class="nav-link" href="/admin/friends/" data-no-swup>
+          <a class="nav-link" href="#friends" onclick="showSection('friends', this)">
             <span class="nav-link-icon">
               <svg xmlns="http://www.w3.org/2000/svg" class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
             </span>
             <span>友情链接</span>
           </a>
-          <a class="nav-link" href="/admin/bangumi/" data-no-swup>
+          <a class="nav-link" href="#bangumi" onclick="showSection('bangumi', this)">
             <span class="nav-link-icon">
               <svg xmlns="http://www.w3.org/2000/svg" class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg>
             </span>
@@ -914,6 +1003,17 @@ import { siteConfig } from "@/config/siteConfig";
               <svg xmlns="http://www.w3.org/2000/svg" class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
             </span>
             <span>音乐设置</span>
+          </a>
+        </div>
+
+        <div class="nav-group">
+          <div class="nav-label">系统设置</div>
+          <a class="nav-link" href="#settings" onclick="showSection('settings', this)">
+            <span class="nav-link-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            </span>
+            <span>接口配置</span>
+            <span class="token-status unset" id="nav-token-status" style="margin-left:auto;font-size:10px;padding:1px 6px;">未配置</span>
           </a>
         </div>
       </nav>
@@ -1001,7 +1101,7 @@ import { siteConfig } from "@/config/siteConfig";
             <span class="section-title">快捷操作</span>
           </div>
           <div class="cards-grid">
-            <a href="/admin/moments/" class="cfg-card" data-no-swup>
+            <div class="cfg-card" style="cursor:pointer;" onclick="location.hash='#moments'">
               <div class="cfg-card-ico">✍️</div>
               <div class="cfg-card-title">发布说说</div>
               <div class="cfg-card-desc">发布新的动态、心情和日常分享，支持 Markdown 格式</div>
@@ -1009,8 +1109,8 @@ import { siteConfig } from "@/config/siteConfig";
                 进入管理
                 <span class="arrow">→</span>
               </div>
-            </a>
-            <a href="/admin/notebooks/" class="cfg-card" data-no-swup>
+            </div>
+            <div class="cfg-card" style="cursor:pointer;" onclick="location.hash='#notebooks'">
               <div class="cfg-card-ico">📓</div>
               <div class="cfg-card-title">笔记管理</div>
               <div class="cfg-card-desc">管理你的笔记本和日常记录，支持增删改查</div>
@@ -1018,8 +1118,8 @@ import { siteConfig } from "@/config/siteConfig";
                 进入管理
                 <span class="arrow">→</span>
               </div>
-            </a>
-            <a href="/admin/friends/" class="cfg-card" data-no-swup>
+            </div>
+            <div class="cfg-card" style="cursor:pointer;" onclick="location.hash='#friends'">
               <div class="cfg-card-ico">🔗</div>
               <div class="cfg-card-title">友链管理</div>
               <div class="cfg-card-desc">添加、审核和管理友情链接，支持待审核状态</div>
@@ -1027,8 +1127,8 @@ import { siteConfig } from "@/config/siteConfig";
                 进入管理
                 <span class="arrow">→</span>
               </div>
-            </a>
-            <a href="/admin/bangumi/" class="cfg-card" data-no-swup>
+            </div>
+            <div class="cfg-card" style="cursor:pointer;" onclick="location.hash='#bangumi'">
               <div class="cfg-card-ico">🎬</div>
               <div class="cfg-card-title">影视追番</div>
               <div class="cfg-card-desc">管理番剧、电影、书籍和音乐收藏</div>
@@ -1036,7 +1136,7 @@ import { siteConfig } from "@/config/siteConfig";
                 进入管理
                 <span class="arrow">→</span>
               </div>
-            </a>
+            </div>
           </div>
         </section>
 
@@ -1094,7 +1194,7 @@ import { siteConfig } from "@/config/siteConfig";
               <div class="cfg-card-desc">src/content/spec/guestbook.md — 访客留言页面，可通过 PagesCMS 编辑</div>
               <div class="cfg-card-foot">Markdown 内容</div>
             </div>
-            <a href="/admin/friends/" class="cfg-card" data-no-swup>
+            <div class="cfg-card" style="cursor:pointer;" onclick="location.hash='#friends'">
               <div class="cfg-card-ico">🔗</div>
               <div class="cfg-card-title">友情链接</div>
               <div class="cfg-card-desc">管理友链申请和展示，支持分类和审核状态</div>
@@ -1102,7 +1202,7 @@ import { siteConfig } from "@/config/siteConfig";
                 进入管理
                 <span class="arrow">→</span>
               </div>
-            </a>
+            </div>
           </div>
         </section>
 
@@ -1220,6 +1320,74 @@ import { siteConfig } from "@/config/siteConfig";
             </a>
           </div>
         </section>
+
+        <!-- Moments (iframe) -->
+        <section id="section-moments" class="page-section">
+          <iframe id="frame-moments" class="section-frame" src="about:blank" loading="lazy"></iframe>
+        </section>
+
+        <!-- Notebooks (iframe) -->
+        <section id="section-notebooks" class="page-section">
+          <iframe id="frame-notebooks" class="section-frame" src="about:blank" loading="lazy"></iframe>
+        </section>
+
+        <!-- Friends (iframe) -->
+        <section id="section-friends" class="page-section">
+          <iframe id="frame-friends" class="section-frame" src="about:blank" loading="lazy"></iframe>
+        </section>
+
+        <!-- Bangumi (iframe) -->
+        <section id="section-bangumi" class="page-section">
+          <iframe id="frame-bangumi" class="section-frame" src="about:blank" loading="lazy"></iframe>
+        </section>
+
+        <!-- Settings -->
+        <section id="section-settings" class="page-section">
+          <div class="page-head">
+            <h2>🔧 接口配置</h2>
+            <p>统一管理 GitHub Token 等接口凭据，一处配置全后台生效</p>
+          </div>
+
+          <div class="settings-card">
+            <h3>🔑 GitHub Token <span class="token-status" id="token-status-badge">未配置</span></h3>
+            <p>说说动态、笔记管理、友情链接、影视追番均使用 GitHub Gist 存储数据，需要配置一个拥有 Gist 权限的 Personal Access Token。</p>
+            <div class="form-row">
+              <input type="password" class="form-input" id="gh-token-input" placeholder="ghp_xxx 或 github_pat_xxx" autocomplete="off" />
+              <button class="btn btn-primary btn-sm" onclick="saveToken()" style="height:38px;padding:0 16px;">保存</button>
+              <button class="btn btn-ghost btn-sm" onclick="clearToken()" style="height:38px;padding:0 12px;">清除</button>
+            </div>
+            <div class="settings-tip">
+              <strong>如何获取 Token：</strong>前往 <a href="https://github.com/settings/tokens/new?scopes=gist&description=Firefly-Blog-CMS" target="_blank">GitHub Token 设置页</a>，勾选 <code>gist</code> 权限，生成后复制粘贴到上方。Token 仅保存在当前浏览器的 localStorage 中，不会上传到任何服务器。
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <h3>🧪 Token 连接测试</h3>
+            <p>保存 Token 后可以点击下方按钮测试是否能正常连接 GitHub API。</p>
+            <button class="btn btn-ghost btn-sm" onclick="testToken()" id="test-token-btn" style="height:38px;padding:0 16px;">测试连接</button>
+            <div id="test-result" style="margin-top:12px;font-size:13px;"></div>
+          </div>
+
+          <div class="settings-card">
+            <h3>🔐 管理密码修改</h3>
+            <p>输入新密码后点击修改，系统将自动计算 SHA-256 哈希并通过 GitHub API 更新配置文件。<strong style="color:var(--warn);">注意：修改后需要等待自动重新部署才能生效。</strong></p>
+            <div class="form-row" style="margin-bottom:10px;">
+              <input type="password" class="form-input" id="new-password" placeholder="新密码（至少4位）" autocomplete="new-password" style="flex:1;" />
+              <input type="password" class="form-input" id="confirm-password" placeholder="确认新密码" autocomplete="new-password" style="flex:1;" />
+            </div>
+            <div style="margin-bottom:10px;">
+              <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-muted);cursor:pointer;">
+                <input type="checkbox" id="pwd-use-separate-repo-token" onchange="toggleRepoTokenInput()" />
+                使用单独的 Repo Token（Token 需要 <code>repo</code> 权限才能修改仓库文件）
+              </label>
+            </div>
+            <div id="repo-token-wrap" style="display:none;margin-bottom:10px;">
+              <input type="password" class="form-input" id="repo-token-input" placeholder="github_pat_xxx（具有 repo 权限）" autocomplete="off" />
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="changePassword()" id="change-pwd-btn" style="height:38px;padding:0 20px;">修改密码</button>
+            <div id="pwd-result" style="margin-top:12px;font-size:13px;"></div>
+          </div>
+        </section>
       </div>
     </main>
   </div>
@@ -1327,25 +1495,271 @@ import { siteConfig } from "@/config/siteConfig";
     var titles = {
       "dashboard": "仪表盘",
       "posts": "博客文章",
+      "moments": "说说动态",
+      "notebooks": "笔记管理",
+      "friends": "友情链接",
+      "bangumi": "影视追番",
       "pages": "页面内容",
       "gallery": "相册管理",
       "site-config": "站点设置",
       "appearance": "外观主题",
-      "music": "音乐设置"
+      "music": "音乐设置",
+      "settings": "接口配置"
     };
 
+    var iframePages = {
+      "moments": "/admin/moments/?embed=1",
+      "notebooks": "/admin/notebooks/?embed=1",
+      "friends": "/admin/friends/?embed=1",
+      "bangumi": "/admin/bangumi/?embed=1"
+    };
+
+    var loadedIframes = {};
+
     function showSection(name, el) {
-      event && event.preventDefault && event.preventDefault();
+      if (event && event.preventDefault) event.preventDefault();
       document.querySelectorAll(".page-section").forEach(function(s) { s.classList.remove("active"); });
       var target = $("section-" + name);
       if (target) target.classList.add("active");
 
+      // 如果是iframe页面，延迟加载src
+      if (iframePages[name] && !loadedIframes[name]) {
+        var frame = $("frame-" + name);
+        if (frame) {
+          frame.src = iframePages[name];
+          loadedIframes[name] = true;
+        }
+      }
+
+      // 更新导航高亮
       document.querySelectorAll(".nav-link").forEach(function(n) { n.classList.remove("active"); });
-      if (el) el.classList.add("active");
+      if (el) {
+        el.classList.add("active");
+      } else {
+        // 通过hash找到对应nav-link
+        var hashLink = document.querySelector('.nav-link[href="#' + name + '"]');
+        if (hashLink) hashLink.classList.add("active");
+      }
 
       $("page-title").textContent = titles[name] || "仪表盘";
+      location.hash = name;
       closeSidebar();
     }
+
+    // hash路由
+    function handleHash() {
+      var hash = (location.hash || "#dashboard").replace("#", "");
+      if (!titles[hash]) hash = "dashboard";
+      var link = document.querySelector('.nav-link[href="#' + hash + '"]');
+      showSection(hash, link);
+    }
+    window.addEventListener("hashchange", handleHash);
+
+    // 监听iframe的退出登录消息
+    window.addEventListener("message", function(e) {
+      if (e.data && e.data.type === "admin-logout") {
+        doLogout();
+      }
+    });
+
+    // ===== GitHub Token 管理 =====
+    var TOKEN_KEY = "gh_moments_token";
+
+    function updateTokenStatus() {
+      var token = localStorage.getItem(TOKEN_KEY) || "";
+      var badge = $("token-status-badge");
+      var navBadge = $("nav-token-status");
+      var input = $("gh-token-input");
+      if (token) {
+        var masked = token.length > 8 ? token.slice(0, 4) + "****" + token.slice(-4) : "****";
+        if (badge) { badge.textContent = "已配置 " + masked; badge.className = "token-status set"; }
+        if (navBadge) { navBadge.textContent = "已配置"; navBadge.className = "token-status set"; navBadge.style.fontSize = "10px"; navBadge.style.padding = "1px 6px"; }
+        if (input) input.value = "";
+      } else {
+        if (badge) { badge.textContent = "未配置"; badge.className = "token-status unset"; }
+        if (navBadge) { navBadge.textContent = "未配置"; navBadge.className = "token-status unset"; navBadge.style.fontSize = "10px"; navBadge.style.padding = "1px 6px"; }
+      }
+    }
+
+    function saveToken() {
+      var input = $("gh-token-input");
+      var token = input.value.trim();
+      if (!token) { showTestResult("请输入 Token", false); return; }
+      localStorage.setItem(TOKEN_KEY, token);
+      input.value = "";
+      updateTokenStatus();
+      // 清除iframe缓存，下次进入时重新加载以使用新token
+      loadedIframes = {};
+      document.querySelectorAll(".section-frame").forEach(function(f) { f.src = "about:blank"; });
+      showTestResult("✓ Token 已保存，刷新管理页面即可生效", true);
+    }
+
+    function clearToken() {
+      if (!confirm("确定要清除已保存的 Token 吗？")) return;
+      localStorage.removeItem(TOKEN_KEY);
+      updateTokenStatus();
+      loadedIframes = {};
+      document.querySelectorAll(".section-frame").forEach(function(f) { f.src = "about:blank"; });
+      showTestResult("Token 已清除", false);
+    }
+
+    function testToken() {
+      var token = localStorage.getItem(TOKEN_KEY) || "";
+      var result = $("test-result");
+      var btn = $("test-token-btn");
+      if (!token) { result.innerHTML = '<span style="color:var(--warning)">请先输入并保存 Token</span>'; return; }
+      btn.disabled = true;
+      btn.textContent = "测试中...";
+      result.innerHTML = '<span style="color:var(--text-tertiary)">正在连接 GitHub API...</span>';
+      fetch("https://api.github.com/gists", {
+        headers: { "Authorization": "Bearer " + token, "Accept": "application/vnd.github+json" }
+      }).then(function(r) {
+        btn.disabled = false;
+        btn.textContent = "测试连接";
+        if (r.ok) {
+          return r.json().then(function(data) {
+            result.innerHTML = '<span style="color:var(--success)">✓ 连接成功！Token 有效，可访问 Gist 列表（' + (Array.isArray(data) ? data.length : '0') + ' 个 Gist）</span>';
+          });
+        } else if (r.status === 401) {
+          result.innerHTML = '<span style="color:var(--danger)">✗ Token 无效或已过期，请重新生成</span>';
+        } else {
+          result.innerHTML = '<span style="color:var(--danger)">✗ 连接失败（HTTP ' + r.status + '）</span>';
+        }
+      }).catch(function(e) {
+        btn.disabled = false;
+        btn.textContent = "测试连接";
+        result.innerHTML = '<span style="color:var(--danger)">✗ 网络错误：' + e.message + '</span>';
+      });
+    }
+
+    function showTestResult(msg, ok) {
+      var result = $("test-result");
+      if (result) result.innerHTML = '<span style="color:' + (ok ? 'var(--success)' : 'var(--warning)') + '">' + msg + '</span>';
+    }
+
+    var CONFIG_PATH = "src/config/externalMomentsConfig.ts";
+    var REPO_OWNER = "fqzlr";
+    var REPO_NAME = "my-blog";
+
+    function toggleRepoTokenInput() {
+      var cb = $("pwd-use-separate-repo-token");
+      var wrap = $("repo-token-wrap");
+      wrap.style.display = cb.checked ? "block" : "none";
+    }
+
+    function b64EncodeUnicode(str) {
+      return btoa(unescape(encodeURIComponent(str)));
+    }
+
+    function b64DecodeUnicode(str) {
+      return decodeURIComponent(escape(atob(str)));
+    }
+
+    async function changePassword() {
+      var newPwd = $("new-password").value;
+      var confirmPwd = $("confirm-password").value;
+      var result = $("pwd-result");
+      var btn = $("change-pwd-btn");
+
+      if (!newPwd || newPwd.length < 4) {
+        result.innerHTML = '<span style="color:var(--danger)">密码长度至少4位</span>';
+        return;
+      }
+      if (newPwd !== confirmPwd) {
+        result.innerHTML = '<span style="color:var(--danger)">两次输入的密码不一致</span>';
+        return;
+      }
+
+      var useSeparate = $("pwd-use-separate-repo-token").checked;
+      var token = useSeparate ? ($("repo-token-input").value.trim()) : (localStorage.getItem(TOKEN_KEY) || "");
+      if (!token) {
+        result.innerHTML = '<span style="color:var(--danger)">' + (useSeparate ? '请输入 Repo Token' : '请先在上方配置 GitHub Token（需包含 repo 权限）或勾选使用单独 Repo Token') + '</span>';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = "修改中...";
+      result.innerHTML = '<span style="color:var(--text-tertiary)">正在计算密码哈希...</span>';
+
+      try {
+        var newHash = await sha256(newPwd);
+        result.innerHTML = '<span style="color:var(--text-tertiary)">正在获取配置文件...</span>';
+
+        var fileUrl = "https://api.github.com/repos/" + REPO_OWNER + "/" + REPO_NAME + "/contents/" + CONFIG_PATH;
+        var headers = {
+          "Authorization": "Bearer " + token,
+          "Accept": "application/vnd.github+json"
+        };
+
+        var getResp = await fetch(fileUrl, { headers: headers });
+        if (!getResp.ok) {
+          if (getResp.status === 404) {
+            throw new Error("配置文件未找到：" + CONFIG_PATH + "，请确认仓库路径是否正确");
+          } else if (getResp.status === 401 || getResp.status === 403) {
+            throw new Error("Token 无权限访问仓库，请确保 Token 具有 repo 权限");
+          }
+          throw new Error("获取配置文件失败（HTTP " + getResp.status + "）");
+        }
+
+        var fileData = await getResp.json();
+        var content = b64DecodeUnicode(fileData.content);
+        var fileSha = fileData.sha;
+
+        var oldHashMatch = content.match(/adminPasswordHash:\s*"([a-f0-9]{64})"/);
+        if (!oldHashMatch) {
+          throw new Error("未能在配置文件中找到 adminPasswordHash 字段");
+        }
+        var oldHash = oldHashMatch[1];
+        var newContent = content.replace(
+          /adminPasswordHash:\s*"[a-f0-9]{64}"/,
+          'adminPasswordHash:\n\t\t"' + newHash + '"'
+        );
+
+        result.innerHTML = '<span style="color:var(--text-tertiary)">正在提交更新到 GitHub...</span>';
+
+        var putResp = await fetch(fileUrl, {
+          method: "PUT",
+          headers: Object.assign({}, headers, { "Content-Type": "application/json" }),
+          body: JSON.stringify({
+            message: "chore(admin): update admin password hash",
+            content: b64EncodeUnicode(newContent),
+            sha: fileSha
+          })
+        });
+
+        if (!putResp.ok) {
+          var errText = await putResp.text();
+          var errMsg = "更新失败（HTTP " + putResp.status + "）";
+          try {
+            var errJson = JSON.parse(errText);
+            if (errJson.message) errMsg += "：" + errJson.message;
+          } catch(e) {}
+          throw new Error(errMsg);
+        }
+
+        passwordHash = newHash;
+        $("new-password").value = "";
+        $("confirm-password").value = "";
+        if (useSeparate) $("repo-token-input").value = "";
+        result.innerHTML = '<span style="color:var(--success)">✓ 密码修改成功！新密码哈希已提交到 GitHub。请等待自动重新部署完成后使用新密码登录（通常需要1-3分钟）。</span>';
+      } catch(e) {
+        result.innerHTML = '<span style="color:var(--danger)">✗ ' + e.message + '</span>';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "修改密码";
+      }
+    }
+
+    // Enter键保存Token
+    window.addEventListener("DOMContentLoaded", function() {
+      var tkInput = $("gh-token-input");
+      if (tkInput) {
+        tkInput.addEventListener("keydown", function(e) {
+          if (e.key === "Enter") { e.preventDefault(); saveToken(); }
+        });
+      }
+      updateTokenStatus();
+    });
 
     async function doLogin() {
       var input = $("login-pwd").value;
@@ -1359,6 +1773,8 @@ import { siteConfig } from "@/config/siteConfig";
           sessionStorage.setItem("admin_auth", "1");
           document.body.classList.add("authed");
           $("login-pwd").value = "";
+          updateTokenStatus();
+          setTimeout(handleHash, 50);
         } else {
           $("login-error").textContent = "密码错误，请重试";
           $("login-pwd").value = "";
@@ -1382,6 +1798,8 @@ import { siteConfig } from "@/config/siteConfig";
 
     if (sessionStorage.getItem("admin_auth") === "1") {
       document.body.classList.add("authed");
+      updateTokenStatus();
+      setTimeout(handleHash, 50);
     } else {
       setTimeout(function(){ $("login-pwd").focus(); }, 100);
     }

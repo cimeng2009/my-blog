@@ -34,7 +34,7 @@ export const externalMomentsConfig = {
 	// 注意：密码仅存储为 SHA-256 哈希，无法从哈希反推出明文密码
 	// ========================================================================
 	adminPasswordHash:
-		"240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9",
+		"837b518a396d573ec995f128e2191865ea48c9250585db62718b94463163196c",
 
 	// GitHub Token（优先从环境变量 GITHUB_TOKEN 读取）
 	// EdgeOne 部署时在环境变量中设置 GITHUB_TOKEN=你的token
