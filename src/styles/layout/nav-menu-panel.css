@@ -195,3 +195,22 @@
 		display: none !important;
 	}
 }
+
+.nav-drawer-footer {
+	flex-shrink: 0;
+	padding: 0.75rem 0.75rem 1rem;
+	border-top: 1px solid var(--line-divider);
+	margin-top: auto;
+}
+
+.nav-drawer-footer .nav-drawer-link {
+	border-radius: 0;
+	min-height: 2.75rem;
+	padding: 0.625rem 1rem;
+}
+
+.nav-drawer-footer .nav-drawer-link-text {
+	font-size: 0.9375rem;
+	font-weight: 500;
+	opacity: 0.7;
+}

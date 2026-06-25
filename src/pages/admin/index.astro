@@ -1,524 +1,1406 @@
 ---
-// 后台管理入口 - 动画角色登录页
 import { externalMomentsConfig } from "@/config/externalMomentsConfig";
+import { siteConfig } from "@/config/siteConfig";
 ---
 
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>后台管理</title>
+  <title>{siteConfig.title} - 内容管理</title>
   <style is:inline>
     :root {
-      --bg: #f8f8f8; --card: #fff; --border: #e8e8e8; --text: #1a1a1a;
-      --text-2: #666; --text-3: #999; --primary: #8b5cf6;
-      --input-bg: #fafafa; --hover: #f3f0ff; --danger: #ef4444;
-      --success: #22c55e; --radius: 12px;
+      --primary: oklch(0.25 0 0);
+      --primary-hover: oklch(0.15 0 0);
+      --primary-light: oklch(0.25 0 0 / 0.08);
+      --primary-light-hover: oklch(0.25 0 0 / 0.12);
+
+      --bg: oklch(1 0 0);
+      --bg-body: oklch(0.975 0.002 260);
+      --bg-hover: oklch(0.96 0.002 260);
+      --bg-active: oklch(0.94 0.002 260);
+
+      --text: oklch(0.12 0.005 260);
+      --text-secondary: oklch(0.45 0.01 260);
+      --text-tertiary: oklch(0.62 0.01 260);
+      --text-muted: oklch(0.75 0.01 260);
+
+      --border: oklch(0.88 0.005 260);
+      --border-light: oklch(0.93 0.003 260);
+
+      --success: oklch(0.58 0.12 148);
+      --success-bg: oklch(0.58 0.12 148 / 0.1);
+      --warning: oklch(0.70 0.14 78);
+      --warning-bg: oklch(0.70 0.14 78 / 0.1);
+      --danger: oklch(0.58 0.20 25);
+      --danger-bg: oklch(0.58 0.20 25 / 0.1);
+      --info: oklch(0.60 0.15 250);
+      --info-bg: oklch(0.60 0.15 250 / 0.1);
+
+      --radius-sm: 4px;
+      --radius: 6px;
+      --radius-lg: 10px;
+      --radius-xl: 14px;
+
+      --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.04);
+      --shadow: 0 1px 3px oklch(0 0 0 / 0.06), 0 1px 2px oklch(0 0 0 / 0.04);
+      --shadow-md: 0 4px 6px -1px oklch(0 0 0 / 0.06), 0 2px 4px -2px oklch(0 0 0 / 0.06);
+      --shadow-lg: 0 10px 15px -3px oklch(0 0 0 / 0.06), 0 4px 6px -4px oklch(0 0 0 / 0.06);
+
+      --sidebar-width: 260px;
+      --topbar-height: 60px;
+      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
+
     :root.dark {
-      --bg: #111; --card: #1a1a1a; --border: #2a2a2a; --text: #eee;
-      --text-2: #aaa; --text-3: #666; --input-bg: #222; --hover: #2a2040;
+      --primary: oklch(0.90 0 0);
+      --primary-hover: oklch(1 0 0);
+      --primary-light: oklch(0.90 0 0 / 0.1);
+      --primary-light-hover: oklch(0.90 0 0 / 0.16);
+
+      --bg: oklch(0.14 0.005 260);
+      --bg-body: oklch(0.11 0.005 260);
+      --bg-hover: oklch(0.18 0.005 260);
+      --bg-active: oklch(0.22 0.005 260);
+
+      --text: oklch(0.90 0.01 260);
+      --text-secondary: oklch(0.65 0.01 260);
+      --text-tertiary: oklch(0.50 0.01 260);
+      --text-muted: oklch(0.38 0.01 260);
+
+      --border: oklch(0.28 0.005 260);
+      --border-light: oklch(0.22 0.005 260);
+
+      --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.3);
+      --shadow: 0 1px 3px oklch(0 0 0 / 0.4), 0 1px 2px oklch(0 0 0 / 0.3);
+      --shadow-md: 0 4px 6px -1px oklch(0 0 0 / 0.4), 0 2px 4px -2px oklch(0 0 0 / 0.3);
+      --shadow-lg: 0 10px 15px -3px oklch(0 0 0 / 0.4), 0 4px 6px -4px oklch(0 0 0 / 0.3);
     }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans SC", sans-serif;
-      background: var(--bg); color: var(--text); min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans SC", "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg-body);
+      color: var(--text);
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      line-height: 1.6;
+      font-size: 14px;
     }
 
-    /* ===== 双栏布局 ===== */
-    .login-split {
-      display: grid; grid-template-columns: 1fr; min-height: 100vh;
-    }
-    @media (min-width: 1024px) {
-      .login-split { grid-template-columns: 1fr 1fr; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    input { font-family: inherit; }
+
+    /* ===== Scrollbar ===== */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }
+
+    /* ===== Login Page ===== */
+    .login-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: var(--bg-body);
+      position: relative;
+      overflow: hidden;
     }
 
-    /* ===== 左侧动画区 ===== */
-    .login-left {
-      display: none; position: relative; overflow: hidden;
-      background: linear-gradient(135deg, #7c3aed 0%, #6C3FF5 40%, #5b21b6 100%);
-    }
-    @media (min-width: 1024px) {
-      .login-left { display: flex; flex-direction: column; justify-content: space-between; }
-    }
-    .login-left::before {
-      content: ''; position: absolute; inset: 0;
-      background: radial-gradient(circle at 70% 30%, rgba(255,255,255,0.08) 0%, transparent 50%),
-                  radial-gradient(circle at 30% 70%, rgba(255,255,255,0.05) 0%, transparent 50%);
-    }
-    .left-brand {
-      position: relative; z-index: 2; padding: 2rem;
-      display: flex; align-items: center; gap: 0.5rem;
-      color: rgba(255,255,255,0.9); font-size: 1.125rem; font-weight: 600;
-    }
-    .left-brand .logo {
-      width: 32px; height: 32px; border-radius: 8px;
-      background: rgba(255,255,255,0.15); backdrop-filter: blur(8px);
-      display: flex; align-items: center; justify-content: center; font-size: 1rem;
-    }
-    .left-footer {
-      position: relative; z-index: 2; padding: 2rem;
-      display: flex; gap: 2rem;
-      font-size: 0.8125rem; color: rgba(255,255,255,0.5);
-    }
-    .left-footer a { color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s; }
-    .left-footer a:hover { color: rgba(255,255,255,0.9); }
-
-    /* ===== 角色容器 ===== */
-    .characters {
-      position: relative; z-index: 2;
-      display: flex; align-items: flex-end; justify-content: center;
-      height: 420px; padding: 0 2rem;
-    }
-    .char-stage {
-      position: relative; width: 450px; height: 400px;
+    .login-wrap::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(ellipse at 30% 20%, oklch(0.25 0 0 / 0.03) 0%, transparent 50%),
+                  radial-gradient(ellipse at 70% 80%, oklch(0.25 0 0 / 0.02) 0%, transparent 50%);
+      pointer-events: none;
     }
 
-    /* ===== 角色通用 ===== */
-    .character {
-      position: absolute; bottom: 0; transform-origin: bottom center;
-      transition: transform 0.7s cubic-bezier(0.4,0,0.2,1), height 0.7s cubic-bezier(0.4,0,0.2,1);
+    :root.dark .login-wrap::before {
+      background: radial-gradient(ellipse at 30% 20%, oklch(0.9 0 0 / 0.03) 0%, transparent 50%),
+                  radial-gradient(ellipse at 70% 80%, oklch(0.9 0 0 / 0.02) 0%, transparent 50%);
     }
-    .char-eyes {
-      position: absolute; display: flex; gap: 0;
-      transition: left 0.7s ease, top 0.7s ease;
+
+    .login-box {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      background: var(--bg);
+      border-radius: var(--radius-xl);
+      padding: 40px 36px;
+      box-shadow: var(--shadow-lg), 0 0 0 1px var(--border-light);
     }
-    .eye {
-      border-radius: 50%; background: #fff;
-      display: flex; align-items: center; justify-content: center;
-      overflow: hidden; transition: height 0.15s ease;
+
+    .login-brand {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .login-brand-icon {
+      width: 52px;
+      height: 52px;
+      margin: 0 auto 16px;
+      border-radius: var(--radius-lg);
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px oklch(0 0 0 / 0.1);
+    }
+
+    .login-brand-icon svg {
+      width: 26px;
+      height: 26px;
+      color: var(--bg);
+    }
+
+    .login-brand-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .login-greeting {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .login-greeting h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+    }
+
+    .login-greeting p {
+      font-size: 14px;
+      color: var(--text-tertiary);
+    }
+
+    .form-field {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .form-input-wrap {
       position: relative;
     }
-    .eye-pupil {
-      border-radius: 50%; background: #2D2D2D;
-      transition: transform 0.1s ease-out;
+
+    .form-input-icon {
       position: absolute;
-    }
-    /* 纯瞳孔（无白眼） */
-    .pupil-only {
-      border-radius: 50%; background: #2D2D2D;
-      transition: transform 0.1s ease-out;
-    }
-
-    /* ===== 紫色角色（高个子） ===== */
-    .char-purple {
-      left: 70px; width: 140px; height: 350px;
-      background: #6C3FF5; border-radius: 10px 10px 0 0; z-index: 1;
-    }
-    .char-purple .char-eyes { gap: 28px; left: 38px; top: 40px; }
-    .char-purple .eye { width: 18px; height: 18px; }
-    .char-purple .eye-pupil { width: 7px; height: 7px; }
-
-    /* ===== 黑色角色（中等） ===== */
-    .char-black {
-      left: 200px; width: 100px; height: 270px;
-      background: #2D2D2D; border-radius: 8px 8px 0 0; z-index: 2;
-    }
-    .char-black .char-eyes { gap: 20px; left: 22px; top: 28px; }
-    .char-black .eye { width: 16px; height: 16px; }
-    .char-black .eye-pupil { width: 6px; height: 6px; }
-
-    /* ===== 橙色角色（半圆） ===== */
-    .char-orange {
-      left: 0; width: 200px; height: 170px;
-      background: #FF9B6B; border-radius: 100px 100px 0 0; z-index: 3;
-    }
-    .char-orange .char-eyes { gap: 28px; left: 68px; top: 75px; }
-    .char-orange .pupil-only { width: 12px; height: 12px; }
-
-    /* ===== 黄色角色（高半圆） ===== */
-    .char-yellow {
-      left: 260px; width: 120px; height: 200px;
-      background: #E8D754; border-radius: 60px 60px 0 0; z-index: 4;
-    }
-    .char-yellow .char-eyes { gap: 20px; left: 40px; top: 35px; }
-    .char-yellow .pupil-only { width: 12px; height: 12px; }
-    .char-yellow .mouth {
-      position: absolute; width: 50px; height: 3px;
-      background: #2D2D2D; border-radius: 2px;
-      left: 35px; top: 80px;
-      transition: left 0.2s, top 0.2s;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-tertiary);
+      pointer-events: none;
     }
 
-    /* ===== 右侧登录区 ===== */
-    .login-right {
-      display: flex; align-items: center; justify-content: center;
-      padding: 2rem; background: var(--bg);
-    }
-    .login-form-wrap {
-      width: 100%; max-width: 400px;
-    }
-    .login-header { text-align: center; margin-bottom: 2.5rem; }
-    .login-header h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.375rem; }
-    .login-header p { font-size: 0.875rem; color: var(--text-3); }
-
-    .form-group { margin-bottom: 1.25rem; }
-    .form-label {
-      display: block; font-size: 0.8125rem; font-weight: 500;
-      color: var(--text-2); margin-bottom: 0.5rem;
-    }
     .form-input {
-      width: 100%; height: 48px; padding: 0 1rem;
-      border: 1px solid var(--border); border-radius: 10px;
-      font-size: 1rem; background: var(--input-bg); color: var(--text);
-      outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+      height: 44px;
+      padding: 0 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 14px;
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      transition: var(--transition);
     }
+
     .form-input:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(139,92,246,0.1);
+      box-shadow: 0 0 0 3px var(--primary-light);
     }
-    .form-input::placeholder { color: var(--text-3); }
 
-    .login-submit {
-      width: 100%; height: 48px; margin-top: 0.5rem;
-      background: var(--primary); color: #fff; border: none; border-radius: 10px;
-      font-size: 1rem; font-weight: 600; cursor: pointer;
-      transition: filter 0.15s, transform 0.15s;
-    }
-    .login-submit:hover { filter: brightness(1.1); }
-    .login-submit:active { transform: scale(0.97); }
+    .form-input::placeholder { color: var(--text-muted); }
 
-    .login-error {
-      font-size: 0.8125rem; color: var(--danger);
-      margin-top: 0.75rem; min-height: 1.25rem; text-align: center;
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 500;
+      border-radius: var(--radius);
+      transition: var(--transition);
+      white-space: nowrap;
+      user-select: none;
     }
-    .login-back {
-      display: block; text-align: center; margin-top: 2rem;
-      font-size: 0.8125rem; color: var(--text-3);
-      text-decoration: none; transition: color 0.15s;
-    }
-    .login-back:hover { color: var(--primary); }
 
-    /* ===== 后台主页 ===== */
-    .navbar {
-      position: sticky; top: 0; z-index: 50;
-      background: var(--card); border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(12px);
+    .btn-lg {
+      width: 100%;
+      height: 46px;
+      font-size: 14px;
+      border-radius: var(--radius);
     }
-    .navbar-inner {
-      max-width: 640px; margin: 0 auto; padding: 0 1rem;
-      display: flex; align-items: center; justify-content: space-between; height: 52px;
-    }
-    .navbar-left { display: flex; align-items: center; gap: 0.75rem; }
-    .navbar-left h1 { font-size: 1rem; font-weight: 600; }
-    .navbar-left .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--primary); }
-    .nav-right { display: flex; align-items: center; gap: 0.5rem; }
-    .back-link {
-      display: inline-flex; align-items: center; gap: 0.25rem;
-      color: var(--text-2); text-decoration: none; font-size: 0.8125rem;
-      padding: 0.375rem 0.625rem; border-radius: 8px; transition: all 0.15s;
-    }
-    .back-link:hover { background: var(--hover); color: var(--primary); }
-    .back-link svg { width: 16px; height: 16px; }
-    .logout-btn {
-      background: none; border: 1px solid var(--border); color: var(--text-3);
-      padding: 0.25rem 0.5rem; border-radius: 6px; font-size: 0.6875rem;
-      cursor: pointer; transition: all 0.15s;
-    }
-    .logout-btn:hover { border-color: var(--danger); color: var(--danger); }
-    .container { max-width: 640px; margin: 0 auto; padding: 1.25rem 1rem 4rem; }
 
-    .admin-grid {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem;
+    .btn-primary {
+      background: var(--primary);
+      color: var(--bg);
     }
-    .admin-card {
-      display: flex; flex-direction: column; align-items: center;
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 1.5rem 1rem;
-      text-decoration: none; color: var(--text);
-      transition: all 0.2s; cursor: pointer;
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-1px);
     }
-    .admin-card:hover {
-      border-color: var(--primary); transform: translateY(-2px);
-      box-shadow: 0 4px 16px rgba(139,92,246,0.1);
+
+    .btn-primary:active {
+      transform: translateY(0);
+      box-shadow: var(--shadow-sm);
     }
-    .admin-card-icon { font-size: 2rem; margin-bottom: 0.75rem; }
-    .admin-card-title { font-size: 0.9375rem; font-weight: 600; margin-bottom: 0.25rem; }
-    .admin-card-desc { font-size: 0.75rem; color: var(--text-3); text-align: center; }
-    .admin-welcome { text-align: center; margin-bottom: 1.5rem; }
-    .admin-welcome h2 { font-size: 1.125rem; font-weight: 600; margin-bottom: 0.25rem; }
-    .admin-welcome p { font-size: 0.8125rem; color: var(--text-3); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-ghost:hover {
+      background: var(--bg-hover);
+      color: var(--text);
+      border-color: var(--text-tertiary);
+    }
+
+    .btn-sm {
+      height: 32px;
+      padding: 0 12px;
+      font-size: 13px;
+    }
+
+    .btn-icon {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border-radius: var(--radius);
+      color: var(--text-secondary);
+      background: transparent;
+    }
+
+    .btn-icon:hover {
+      background: var(--bg-hover);
+      color: var(--text);
+    }
+
+    .login-msg {
+      text-align: center;
+      margin-top: 12px;
+      min-height: 20px;
+      font-size: 13px;
+      color: var(--danger);
+    }
+
+    .login-foot {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-light);
+      display: flex;
+      justify-content: center;
+    }
+
+    .login-foot a {
+      font-size: 13px;
+      color: var(--text-tertiary);
+      transition: color 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .login-foot a:hover { color: var(--text); }
+
+    /* ===== App Layout ===== */
+    .app { display: none; min-height: 100vh; }
+    body.authed .app { display: flex; }
+    body.authed .login-wrap { display: none; }
+
+    /* Overlay */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: oklch(0 0 0 / 0.3);
+      z-index: 90;
+      backdrop-filter: blur(2px);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: var(--sidebar-width);
+      flex-shrink: 0;
+      background: var(--bg);
+      border-right: 1px solid var(--border-light);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 100;
+      transition: transform 0.25s ease;
+    }
+
+    .sidebar-head {
+      height: var(--topbar-height);
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--border-light);
+      flex-shrink: 0;
+    }
+
+    .sidebar-logo {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius);
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .sidebar-logo svg {
+      width: 18px;
+      height: 18px;
+      color: var(--bg);
+    }
+
+    .sidebar-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    .sidebar-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 12px 10px;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .nav-group { margin-bottom: 4px; }
+    .nav-group + .nav-group { margin-top: 16px; }
+
+    .nav-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      padding: 8px 12px 6px;
+      line-height: 1;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: var(--radius);
+      color: var(--text-secondary);
+      font-size: 13.5px;
+      font-weight: 450;
+      transition: var(--transition);
+      margin-bottom: 1px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .nav-link:hover {
+      background: var(--bg-hover);
+      color: var(--text);
+    }
+
+    .nav-link.active {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    :root.dark .nav-link.active { color: var(--primary); }
+
+    .nav-link-icon {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 16px;
+    }
+
+    .nav-link-badge {
+      margin-left: auto;
+      font-size: 11px;
+      padding: 1px 7px;
+      border-radius: 10px;
+      background: var(--bg-active);
+      color: var(--text-tertiary);
+      font-weight: 500;
+    }
+
+    .sidebar-foot {
+      padding: 12px;
+      border-top: 1px solid var(--border-light);
+      flex-shrink: 0;
+    }
+
+    .sidebar-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px;
+      border-radius: var(--radius);
+      margin-bottom: 8px;
+    }
+
+    .sidebar-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--bg-active);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .sidebar-user-info { flex: 1; min-width: 0; }
+    .sidebar-user-name { font-size: 13px; font-weight: 600; color: var(--text); }
+    .sidebar-user-role { font-size: 11px; color: var(--text-tertiary); }
+
+    /* Main */
+    .main {
+      flex: 1;
+      margin-left: var(--sidebar-width);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      min-width: 0;
+    }
+
+    /* Topbar */
+    .topbar {
+      height: var(--topbar-height);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border-light);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .menu-toggle { display: none; }
+
+    .topbar-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    .topbar-title small {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-tertiary);
+      margin-left: 8px;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Content */
+    .content {
+      flex: 1;
+      padding: 24px;
+    }
+
+    /* Page Header */
+    .page-head {
+      margin-bottom: 24px;
+    }
+
+    .page-head h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .page-head p {
+      font-size: 14px;
+      color: var(--text-tertiary);
+    }
+
+    /* Stats */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: var(--bg);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card:hover {
+      border-color: var(--border);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--primary);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .stat-card:hover::before { opacity: 1; }
+
+    .stat-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-tertiary);
+      font-weight: 500;
+    }
+
+    .stat-ico {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      background: var(--primary-light);
+    }
+
+    .stat-num {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+      letter-spacing: -0.03em;
+      margin-bottom: 6px;
+    }
+
+    .stat-tip {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Section */
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .section-title small {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-tertiary);
+      margin-left: 8px;
+    }
+
+    /* Cards Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .cfg-card {
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      text-decoration: none;
+      color: var(--text);
+      transition: var(--transition);
+    }
+
+    a.cfg-card { cursor: pointer; }
+    .cfg-card.disabled { cursor: default; opacity: 0.8; }
+
+    .cfg-card:hover {
+      border-color: var(--border);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .cfg-card-ico {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius);
+      background: var(--bg-hover);
+      border: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 14px;
+    }
+
+    .cfg-card-title {
+      font-size: 14.5px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+    }
+
+    .cfg-card-desc {
+      font-size: 13px;
+      color: var(--text-tertiary);
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .cfg-card-foot {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-light);
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    a.cfg-card:hover .cfg-card-foot {
+      color: var(--text-secondary);
+    }
+
+    .cfg-card-foot .arrow {
+      margin-left: auto;
+      transition: transform 0.15s;
+    }
+
+    a.cfg-card:hover .cfg-card-foot .arrow {
+      transform: translateX(3px);
+    }
+
+    /* Page sections */
+    .page-section { display: none; }
+    .page-section.active { display: block; }
 
     .hidden { display: none !important; }
 
-    /* 防止未认证时闪烁：默认隐藏后台主页，JS 判断后再显示 */
-    body:not(.authed) #admin-main { display: none !important; }
+    /* Icon SVGs sizing */
+    .ico { width: 20px; height: 20px; }
+    .ico-sm { width: 16px; height: 16px; }
+    .ico-lg { width: 24px; height: 24px; }
 
-    .dark-fab {
-      position: fixed; bottom: 1.5rem; right: 1.5rem;
-      width: 42px; height: 42px; border-radius: 50%;
-      background: var(--card); border: 1px solid var(--border);
-      cursor: pointer; font-size: 1.125rem;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: all 0.2s;
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        box-shadow: var(--shadow-lg);
+      }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-overlay.open { display: block; }
+      .main { margin-left: 0; }
+      .content { padding: 16px; }
+      .topbar { padding: 0 16px; }
+      .menu-toggle { display: flex; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .stat-card { padding: 16px; }
+      .stat-num { font-size: 22px; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .login-box { padding: 28px 24px; }
+      .topbar-title small { display: none; }
     }
-    .dark-fab:hover { border-color: var(--primary); transform: scale(1.05); }
 
     @media (max-width: 480px) {
-      .login-right { padding: 1.5rem; }
-      .login-header h1 { font-size: 1.5rem; }
-      .navbar-inner { padding: 0 0.75rem; }
-      .container { padding: 1rem 0.75rem 3rem; }
+      .stats-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ===== 登录页 ===== -->
-  <div class="login-split" id="login-page">
-    <!-- 左侧动画 -->
-    <div class="login-left">
-      <div class="left-brand">
-        <div class="logo">✍️</div>
-        <span>后台管理</span>
+  <!-- ===== Login ===== -->
+  <div class="login-wrap" id="login-page">
+    <div class="login-box">
+      <div class="login-brand">
+        <div class="login-brand-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </div>
+        <div class="login-brand-name">内容管理</div>
+      </div>
+      <div class="login-greeting">
+        <h1>欢迎回来</h1>
+        <p>输入密码以访问管理面板</p>
       </div>
 
-      <div class="characters">
-        <div class="char-stage" id="stage">
-          <!-- 紫色高个子 -->
-          <div class="character char-purple" id="char-purple">
-            <div class="char-eyes">
-              <div class="eye"><div class="eye-pupil" data-char="purple"></div></div>
-              <div class="eye"><div class="eye-pupil" data-char="purple"></div></div>
-            </div>
-          </div>
-          <!-- 黑色中等 -->
-          <div class="character char-black" id="char-black">
-            <div class="char-eyes">
-              <div class="eye"><div class="eye-pupil" data-char="black"></div></div>
-              <div class="eye"><div class="eye-pupil" data-char="black"></div></div>
-            </div>
-          </div>
-          <!-- 橙色半圆 -->
-          <div class="character char-orange" id="char-orange">
-            <div class="char-eyes">
-              <div class="pupil-only" data-char="orange"></div>
-              <div class="pupil-only" data-char="orange"></div>
-            </div>
-          </div>
-          <!-- 黄色高半圆 -->
-          <div class="character char-yellow" id="char-yellow">
-            <div class="char-eyes">
-              <div class="pupil-only" data-char="yellow"></div>
-              <div class="pupil-only" data-char="yellow"></div>
-            </div>
-            <div class="mouth" id="yellow-mouth"></div>
-          </div>
+      <div class="form-field">
+        <label class="form-label">访问密码</label>
+        <div class="form-input-wrap">
+          <input type="password" class="form-input" id="login-pwd" placeholder="请输入密码" autocomplete="current-password" />
         </div>
       </div>
 
-      <div class="left-footer">
-        <a href="/" data-no-swup>首页</a>
-        <a href="/moments/" data-no-swup>说说</a>
-        <a href="/life/notebooks/" data-no-swup>笔记</a>
-      </div>
-    </div>
+      <button class="btn btn-primary btn-lg" onclick="doLogin()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        进入管理面板
+      </button>
+      <div class="login-msg" id="login-error"></div>
 
-    <!-- 右侧表单 -->
-    <div class="login-right">
-      <div class="login-form-wrap">
-        <div class="login-header">
-          <h1>Welcome back!</h1>
-          <p>输入密码以进入后台</p>
-        </div>
-        <div class="form-group">
-          <label class="form-label">密码</label>
-          <input type="password" class="form-input" id="login-pwd" placeholder="••••••••" autocomplete="off" />
-        </div>
-        <button class="login-submit" onclick="doLogin()">进入后台</button>
-        <div class="login-error" id="login-error"></div>
-        <a href="/" class="login-back" data-no-swup>← 返回首页</a>
+      <div class="login-foot">
+        <a href="/" data-no-swup>
+          <svg xmlns="http://www.w3.org/2000/svg" class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          返回博客首页
+        </a>
       </div>
     </div>
   </div>
 
-  <!-- ===== 后台主页 ===== -->
-  <div id="admin-main" class="hidden">
-    <nav class="navbar">
-      <div class="navbar-inner">
-        <div class="navbar-left">
-          <span class="dot"></span>
-          <h1>后台管理</h1>
+  <!-- ===== App ===== -->
+  <div class="app" id="app">
+    <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-head">
+        <div class="sidebar-logo">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
         </div>
-        <div class="nav-right">
-          <a href="/" class="back-link" data-no-swup>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
-            <span>首页</span>
+        <div>
+          <div class="sidebar-name">管理面板</div>
+          <div class="sidebar-sub">CMS Dashboard</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-group">
+          <div class="nav-label">概览</div>
+          <a class="nav-link active" href="#dashboard" onclick="showSection('dashboard', this)">
+            <span class="nav-link-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            </span>
+            <span>仪表盘</span>
           </a>
-          <button class="logout-btn" onclick="doLogout()">退出</button>
         </div>
-      </div>
-    </nav>
-    <div class="container">
-      <div class="admin-welcome">
-        <h2>👋 欢迎回来</h2>
-        <p>选择要管理的功能</p>
-      </div>
-      <div class="admin-grid">
-        <a href="/admin/moments/" class="admin-card" data-no-swup>
-          <div class="admin-card-icon">✍️</div>
-          <div class="admin-card-title">说说管理</div>
-          <div class="admin-card-desc">发布、编辑、删除说说</div>
-        </a>
-        <a href="/admin/notebooks/" class="admin-card" data-no-swup>
-          <div class="admin-card-icon">📓</div>
-          <div class="admin-card-title">笔记管理</div>
-          <div class="admin-card-desc">管理笔记本和笔记</div>
-        </a>
-        <a href="/admin/friends/" class="admin-card" data-no-swup>
-          <div class="admin-card-icon">🔗</div>
-          <div class="admin-card-title">友链管理</div>
-          <div class="admin-card-desc">添加、删除友链</div>
-        </a>
-        <a href="/admin/bangumi/" class="admin-card" data-no-swup>
-          <div class="admin-card-icon">🎬</div>
-          <div class="admin-card-title">影视管理</div>
-          <div class="admin-card-desc">搜索、添加影视记录</div>
-        </a>
-      </div>
-    </div>
-  </div>
 
-  <button class="dark-fab" onclick="toggleDark()" title="切换暗色模式">🌙</button>
+        <div class="nav-group">
+          <div class="nav-label">内容管理</div>
+          <a class="nav-link" href="#posts" onclick="showSection('posts', this)">
+            <span class="nav-link-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            </span>
+            <span>博客文章</span>
+          </a>
+          <a class="nav-link" href="/admin/moments/" data-no-swup>
+            <span class="nav-link-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </span>
+            <span>说说动态</span>
+          </a>
+          <a class="nav-link" href="/admin/notebooks/" data-no-swup>
+            <span class="nav-link-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            </span>
+            <span>笔记管理</span>
+          </a>
+          <a class="nav-link" href="/admin/friends/" data-no-swup>
+            <span class="nav-link-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            </span>
+            <span>友情链接</span>
+          </a>
+          <a class="nav-link" href="/admin/bangumi/" data-no-swup>
+            <span class="nav-link-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg>
+            </span>
+            <span>影视追番</span>
+          </a>
+        </div>
+
+        <div class="nav-group">
+          <div class="nav-label">页面设置</div>
+          <a class="nav-link" href="#pages" onclick="showSection('pages', this)">
+            <span class="nav-link-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+            </span>
+            <span>页面内容</span>
+          </a>
+          <a class="nav-link" href="#gallery" onclick="showSection('gallery', this)">
+            <span class="nav-link-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            </span>
+            <span>相册管理</span>
+          </a>
+        </div>
+
+        <div class="nav-group">
+          <div class="nav-label">站点配置</div>
+          <a class="nav-link" href="#site-config" onclick="showSection('site-config', this)">
+            <span class="nav-link-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </span>
+            <span>站点设置</span>
+          </a>
+          <a class="nav-link" href="#appearance" onclick="showSection('appearance', this)">
+            <span class="nav-link-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg>
+            </span>
+            <span>外观主题</span>
+          </a>
+          <a class="nav-link" href="#music" onclick="showSection('music', this)">
+            <span class="nav-link-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            </span>
+            <span>音乐设置</span>
+          </a>
+        </div>
+      </nav>
+
+      <div class="sidebar-foot">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar">👤</div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name">管理员</div>
+            <div class="sidebar-user-role">Administrator</div>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-sm" style="width:100%;gap:6px;" onclick="doLogout()">
+          <svg xmlns="http://www.w3.org/2000/svg" class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          退出登录
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="btn btn-icon menu-toggle" id="menu-btn" onclick="openSidebar()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <div class="topbar-title" id="page-title">仪表盘</div>
+        </div>
+        <div class="topbar-right">
+          <a href="/" class="btn btn-icon" title="查看博客" data-no-swup>
+            <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+          <button class="btn btn-icon" onclick="toggleDark()" title="切换主题" id="theme-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Content -->
+      <div class="content">
+        <!-- Dashboard -->
+        <section id="section-dashboard" class="page-section active">
+          <div class="page-head">
+            <h2>👋 欢迎回来</h2>
+            <p>这里是你的博客管理中心，快速访问常用功能和查看站点概况</p>
+          </div>
+
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="stat-top">
+                <span class="stat-label">博客文章</span>
+                <div class="stat-ico">📝</div>
+              </div>
+              <div class="stat-num" id="stat-posts">--</div>
+              <div class="stat-tip">总发布文章数量</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-top">
+                <span class="stat-label">说说动态</span>
+                <div class="stat-ico">💬</div>
+              </div>
+              <div class="stat-num">--</div>
+              <div class="stat-tip">存储于 GitHub Gist</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-top">
+                <span class="stat-label">友情链接</span>
+                <div class="stat-ico">🔗</div>
+              </div>
+              <div class="stat-num">--</div>
+              <div class="stat-tip">已审核友链数量</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-top">
+                <span class="stat-label">追番/影视</span>
+                <div class="stat-ico">🎬</div>
+              </div>
+              <div class="stat-num">--</div>
+              <div class="stat-tip">收藏条目总数</div>
+            </div>
+          </div>
+
+          <div class="section-head">
+            <span class="section-title">快捷操作</span>
+          </div>
+          <div class="cards-grid">
+            <a href="/admin/moments/" class="cfg-card" data-no-swup>
+              <div class="cfg-card-ico">✍️</div>
+              <div class="cfg-card-title">发布说说</div>
+              <div class="cfg-card-desc">发布新的动态、心情和日常分享，支持 Markdown 格式</div>
+              <div class="cfg-card-foot">
+                进入管理
+                <span class="arrow">→</span>
+              </div>
+            </a>
+            <a href="/admin/notebooks/" class="cfg-card" data-no-swup>
+              <div class="cfg-card-ico">📓</div>
+              <div class="cfg-card-title">笔记管理</div>
+              <div class="cfg-card-desc">管理你的笔记本和日常记录，支持增删改查</div>
+              <div class="cfg-card-foot">
+                进入管理
+                <span class="arrow">→</span>
+              </div>
+            </a>
+            <a href="/admin/friends/" class="cfg-card" data-no-swup>
+              <div class="cfg-card-ico">🔗</div>
+              <div class="cfg-card-title">友链管理</div>
+              <div class="cfg-card-desc">添加、审核和管理友情链接，支持待审核状态</div>
+              <div class="cfg-card-foot">
+                进入管理
+                <span class="arrow">→</span>
+              </div>
+            </a>
+            <a href="/admin/bangumi/" class="cfg-card" data-no-swup>
+              <div class="cfg-card-ico">🎬</div>
+              <div class="cfg-card-title">影视追番</div>
+              <div class="cfg-card-desc">管理番剧、电影、书籍和音乐收藏</div>
+              <div class="cfg-card-foot">
+                进入管理
+                <span class="arrow">→</span>
+              </div>
+            </a>
+          </div>
+        </section>
+
+        <!-- Posts -->
+        <section id="section-posts" class="page-section">
+          <div class="page-head">
+            <h2>📝 博客文章管理</h2>
+            <p>使用 PagesCMS 可视化编辑和发布 Markdown 文章</p>
+          </div>
+          <div class="cards-grid">
+            <a href="https://pagescms.org" target="_blank" class="cfg-card" rel="noopener">
+              <div class="cfg-card-ico">🌐</div>
+              <div class="cfg-card-title">PagesCMS 在线编辑器</div>
+              <div class="cfg-card-desc">在浏览器中可视化编辑 Markdown 文章，支持实时预览、图片上传和 Frontmatter 配置</div>
+              <div class="cfg-card-foot">
+                打开 PagesCMS
+                <span class="arrow">↗</span>
+              </div>
+            </a>
+            <div class="cfg-card disabled">
+              <div class="cfg-card-ico">📂</div>
+              <div class="cfg-card-title">本地文件编辑</div>
+              <div class="cfg-card-desc">文章位于 src/content/posts/ 目录，直接编辑 .md 文件，支持 Frontmatter 配置标题、日期、标签、分类等</div>
+              <div class="cfg-card-foot">
+                Markdown 文件
+              </div>
+            </div>
+            <div class="cfg-card disabled">
+              <div class="cfg-card-ico">📋</div>
+              <div class="cfg-card-title">配置文件</div>
+              <div class="cfg-card-desc">.pages.yml 定义了 CMS 的内容模型、字段和媒体配置</div>
+              <div class="cfg-card-foot">
+                项目根目录
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Pages -->
+        <section id="section-pages" class="page-section">
+          <div class="page-head">
+            <h2>📄 页面内容管理</h2>
+            <p>管理站点的特殊页面内容</p>
+          </div>
+          <div class="cards-grid">
+            <div class="cfg-card disabled">
+              <div class="cfg-card-ico">👤</div>
+              <div class="cfg-card-title">关于页面</div>
+              <div class="cfg-card-desc">src/content/spec/about.md — 个人介绍页面，可通过 PagesCMS 编辑</div>
+              <div class="cfg-card-foot">Markdown 内容</div>
+            </div>
+            <div class="cfg-card disabled">
+              <div class="cfg-card-ico">📬</div>
+              <div class="cfg-card-title">留言板</div>
+              <div class="cfg-card-desc">src/content/spec/guestbook.md — 访客留言页面，可通过 PagesCMS 编辑</div>
+              <div class="cfg-card-foot">Markdown 内容</div>
+            </div>
+            <a href="/admin/friends/" class="cfg-card" data-no-swup>
+              <div class="cfg-card-ico">🔗</div>
+              <div class="cfg-card-title">友情链接</div>
+              <div class="cfg-card-desc">管理友链申请和展示，支持分类和审核状态</div>
+              <div class="cfg-card-foot">
+                进入管理
+                <span class="arrow">→</span>
+              </div>
+            </a>
+          </div>
+        </section>
+
+        <!-- Gallery -->
+        <section id="section-gallery" class="page-section">
+          <div class="page-head">
+            <h2>🖼️ 相册管理</h2>
+            <p>配置文件位于 src/config/galleryConfig.ts</p>
+          </div>
+          <div class="cards-grid">
+            <div class="cfg-card disabled">
+              <div class="cfg-card-ico">📁</div>
+              <div class="cfg-card-title">相册配置</div>
+              <div class="cfg-card-desc">在 galleryConfig.ts 中配置相册列表、密码保护、封面图等，支持网络相册（如 SM.MS）和本地相册</div>
+              <div class="cfg-card-foot">TypeScript 配置</div>
+            </div>
+            <div class="cfg-card disabled">
+              <div class="cfg-card-ico">📷</div>
+              <div class="cfg-card-title">图片上传</div>
+              <div class="cfg-card-desc">推荐使用 SM.MS 图床或其他 CDN 服务，本地图片放置在 public/ 目录</div>
+              <div class="cfg-card-foot">公开目录</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Site Config -->
+        <section id="section-site-config" class="page-section">
+          <div class="page-head">
+            <h2>⚙️ 站点设置</h2>
+            <p>核心配置文件位于 src/config/ 目录</p>
+          </div>
+          <div class="cards-grid">
+            <div class="cfg-card disabled">
+              <div class="cfg-card-ico">🌐</div>
+              <div class="cfg-card-title">站点主配置</div>
+              <div class="cfg-card-desc">siteConfig.ts — 站点标题、URL、主题色、分页设置、页面开关等</div>
+              <div class="cfg-card-foot">src/config/</div>
+            </div>
+            <div class="cfg-card disabled">
+              <div class="cfg-card-ico">👤</div>
+              <div class="cfg-card-title">个人信息</div>
+              <div class="cfg-card-desc">profileConfig.ts — 头像、昵称、签名、社交链接等</div>
+              <div class="cfg-card-foot">src/config/</div>
+            </div>
+            <div class="cfg-card disabled">
+              <div class="cfg-card-ico">🧭</div>
+              <div class="cfg-card-title">导航栏配置</div>
+              <div class="cfg-card-desc">navBarConfig.ts — 顶部导航菜单项配置</div>
+              <div class="cfg-card-foot">src/config/</div>
+            </div>
+            <div class="cfg-card disabled">
+              <div class="cfg-card-ico">📐</div>
+              <div class="cfg-card-title">侧边栏配置</div>
+              <div class="cfg-card-desc">sidebarConfig.ts — 侧边栏组件、小部件配置</div>
+              <div class="cfg-card-foot">src/config/</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Appearance -->
+        <section id="section-appearance" class="page-section">
+          <div class="page-head">
+            <h2>🎨 外观与主题</h2>
+            <p>自定义站点的视觉效果和主题</p>
+          </div>
+          <div class="cards-grid">
+            <div class="cfg-card disabled">
+              <div class="cfg-card-ico">🏞️</div>
+              <div class="cfg-card-title">背景壁纸</div>
+              <div class="cfg-card-desc">backgroundWallpaper.ts — 背景图片、视频、粒子特效等</div>
+              <div class="cfg-card-foot">src/config/</div>
+            </div>
+            <div class="cfg-card disabled">
+              <div class="cfg-card-ico">🔤</div>
+              <div class="cfg-card-title">字体设置</div>
+              <div class="cfg-card-desc">fontConfig.ts — 全局字体、代码字体配置</div>
+              <div class="cfg-card-foot">src/config/</div>
+            </div>
+            <div class="cfg-card disabled">
+              <div class="cfg-card-ico">🖼️</div>
+              <div class="cfg-card-title">封面图配置</div>
+              <div class="cfg-card-desc">coverImageConfig.ts — 文章默认封面、随机封面等</div>
+              <div class="cfg-card-foot">src/config/</div>
+            </div>
+            <div class="cfg-card disabled">
+              <div class="cfg-card-ico">💻</div>
+              <div class="cfg-card-title">代码块高亮</div>
+              <div class="cfg-card-desc">expressiveCodeConfig.ts — 代码高亮主题、行号、复制按钮等</div>
+              <div class="cfg-card-foot">src/config/</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Music -->
+        <section id="section-music" class="page-section">
+          <div class="page-head">
+            <h2>🎵 音乐播放器设置</h2>
+            <p>配置音乐播放器和 3D 可视化效果</p>
+          </div>
+          <div class="cards-grid">
+            <div class="cfg-card disabled">
+              <div class="cfg-card-ico">🎶</div>
+              <div class="cfg-card-title">播放器配置</div>
+              <div class="cfg-card-desc">musicConfig.ts — 歌单列表、默认音量、歌词显示、Meting API 配置等</div>
+              <div class="cfg-card-foot">src/config/ · 支持网易云/QQ/酷狗</div>
+            </div>
+            <a href="/music/" class="cfg-card" data-no-swup>
+              <div class="cfg-card-ico">🎮</div>
+              <div class="cfg-card-title">3D 音乐可视化</div>
+              <div class="cfg-card-desc">沉浸式 Three.js 3D 地形可视化效果，支持音频频谱分析、实时响应</div>
+              <div class="cfg-card-foot">
+                预览效果
+                <span class="arrow">→</span>
+              </div>
+            </a>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
 
   <script is:inline data-hash={externalMomentsConfig.adminPasswordHash || ""}>
-    // ===== 工具 =====
     var passwordHash = document.currentScript.getAttribute("data-hash") || "";
+
     function $(id) { return document.getElementById(id); }
-    async function sha256(str) {
-      var buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
-      return Array.from(new Uint8Array(buf)).map(function(b) { return b.toString(16).padStart(2, "0"); }).join("");
+
+    function sha256Fallback(str) {
+      function rightRotate(value, amount) {
+        return (value >>> amount) | (value << (32 - amount));
+      }
+      var mathPow = Math.pow;
+      var maxWord = mathPow(2, 32);
+      var i, j, result = '', words = [];
+      var asciiBitLength = str.length * 8;
+      var hash = [], k = [], primeCounter = 0, isComposite = {};
+      for (var candidate = 2; primeCounter < 64; candidate++) {
+        if (!isComposite[candidate]) {
+          for (i = 0; i < 313; i += candidate) isComposite[i] = candidate;
+          hash[primeCounter] = (mathPow(candidate, 0.5) * maxWord) | 0;
+          k[primeCounter++] = (mathPow(candidate, 1/3) * maxWord) | 0;
+        }
+      }
+      str += '\x80';
+      while (str.length % 64 - 56) str += '\x00';
+      for (i = 0; i < str.length; i++) {
+        j = str.charCodeAt(i);
+        if (j >> 8) return '';
+        words[i >> 2] |= j << ((3 - i) % 4) * 8;
+      }
+      words[words.length] = ((asciiBitLength / maxWord) | 0);
+      words[words.length] = asciiBitLength;
+      for (j = 0; j < words.length;) {
+        var w = words.slice(j, j += 16), oldHash = hash;
+        hash = hash.slice(0, 8);
+        for (i = 0; i < 64; i++) {
+          var w15 = w[i-15], w2 = w[i-2];
+          var a = hash[0], e = hash[4];
+          var temp1 = hash[7] + (rightRotate(e,6)^rightRotate(e,11)^rightRotate(e,25))
+            + ((e&hash[5])^((~e)&hash[6])) + k[i] + (w[i] = (i<16)?w[i]:(
+              w[i-16]+(rightRotate(w15,7)^rightRotate(w15,18)^(w15>>>3))
+              +w[i-7]+(rightRotate(w2,17)^rightRotate(w2,19)^(w2>>>10))
+            )|0);
+          var temp2 = (rightRotate(a,2)^rightRotate(a,13)^rightRotate(a,22))
+            + ((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));
+          hash = [(temp1+temp2)|0].concat(hash);
+          hash[4] = (hash[4]+temp1)|0;
+        }
+        for (i = 0; i < 8; i++) hash[i] = (hash[i]+oldHash[i])|0;
+      }
+      for (i = 0; i < 8; i++) {
+        for (j = 3; j+1; j--) {
+          var b = (hash[i]>>(j*8))&255;
+          result += ((b<16)?0:'')+b.toString(16);
+        }
+      }
+      return result;
     }
+
+    async function sha256(str) {
+      if (window.crypto && crypto.subtle) {
+        try {
+          var buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+          return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,"0")}).join("");
+        } catch(e) {}
+      }
+      return sha256Fallback(str);
+    }
+
     function toggleDark() {
       document.documentElement.classList.toggle("dark");
-      localStorage.setItem("theme", document.documentElement.classList.contains("dark") ? "dark" : "light");
+      var isDark = document.documentElement.classList.contains("dark");
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+      updateThemeIcon(isDark);
     }
-    if (localStorage.getItem("theme") === "dark") document.documentElement.classList.add("dark");
 
-    // ===== 登录 =====
+    function updateThemeIcon(isDark) {
+      var btn = $("theme-btn");
+      if (!btn) return;
+      btn.innerHTML = isDark
+        ? '<svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>'
+        : '<svg xmlns="http://www.w3.org/2000/svg" class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+    }
+
+    var savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark" || (!savedTheme && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+      document.documentElement.classList.add("dark");
+      updateThemeIcon(true);
+    } else {
+      updateThemeIcon(false);
+    }
+
+    function openSidebar() {
+      $("sidebar").classList.add("open");
+      $("overlay").classList.add("open");
+    }
+
+    function closeSidebar() {
+      $("sidebar").classList.remove("open");
+      $("overlay").classList.remove("open");
+    }
+
+    var titles = {
+      "dashboard": "仪表盘",
+      "posts": "博客文章",
+      "pages": "页面内容",
+      "gallery": "相册管理",
+      "site-config": "站点设置",
+      "appearance": "外观主题",
+      "music": "音乐设置"
+    };
+
+    function showSection(name, el) {
+      event && event.preventDefault && event.preventDefault();
+      document.querySelectorAll(".page-section").forEach(function(s) { s.classList.remove("active"); });
+      var target = $("section-" + name);
+      if (target) target.classList.add("active");
+
+      document.querySelectorAll(".nav-link").forEach(function(n) { n.classList.remove("active"); });
+      if (el) el.classList.add("active");
+
+      $("page-title").textContent = titles[name] || "仪表盘";
+      closeSidebar();
+    }
+
     async function doLogin() {
       var input = $("login-pwd").value;
       if (!input) { $("login-error").textContent = "请输入密码"; return; }
       if (!passwordHash) { $("login-error").textContent = "未配置密码哈希"; return; }
-      var hash = await sha256(input);
-      if (hash === passwordHash) {
-        $("login-error").textContent = "";
-        sessionStorage.setItem("admin_auth", "1");
-        document.body.classList.add("authed");
-        $("login-page").style.display = "none";
-        $("admin-main").classList.remove("hidden");
-        $("admin-main").style.display = "";
-      } else {
-        $("login-error").textContent = "密码错误";
-        $("login-pwd").value = "";
-        $("login-pwd").focus();
+      try {
+        var hash = await sha256(input);
+        if (!hash) { $("login-error").textContent = "加密错误，请刷新重试"; return; }
+        if (hash === passwordHash) {
+          $("login-error").textContent = "";
+          sessionStorage.setItem("admin_auth", "1");
+          document.body.classList.add("authed");
+          $("login-pwd").value = "";
+        } else {
+          $("login-error").textContent = "密码错误，请重试";
+          $("login-pwd").value = "";
+          $("login-pwd").focus();
+        }
+      } catch(e) {
+        $("login-error").textContent = "登录出错：" + e.message;
       }
     }
+
     function doLogout() {
       sessionStorage.removeItem("admin_auth");
-      $("admin-main").classList.add("hidden");
-      $("login-page").style.display = "";
+      document.body.classList.remove("authed");
       $("login-pwd").value = "";
       $("login-error").textContent = "";
     }
+
     $("login-pwd").addEventListener("keydown", function(e) {
       if (e.key === "Enter") { e.preventDefault(); doLogin(); }
     });
 
-    // ===== 角色动画 =====
-    (function() {
-      if (sessionStorage.getItem("admin_auth") === "1") {
-        document.body.classList.add("authed");
-        $("login-page").style.display = "none";
-        $("admin-main").classList.remove("hidden");
-        return; // 不需要动画
+    if (sessionStorage.getItem("admin_auth") === "1") {
+      document.body.classList.add("authed");
+    } else {
+      setTimeout(function(){ $("login-pwd").focus(); }, 100);
+    }
+
+    function checkMobile() {
+      if (window.innerWidth <= 768) {
+        $("menu-btn").classList.remove("hidden");
+      } else {
+        $("menu-btn").classList.add("hidden");
+        closeSidebar();
       }
-      $("login-pwd").focus();
+    }
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
 
-      var mouseX = 0, mouseY = 0;
-      var isTyping = false;
-      var typingTimer = null;
-      var blinkTimers = {};
-
-      // 鼠标追踪
-      document.addEventListener("mousemove", function(e) {
-        mouseX = e.clientX; mouseY = e.clientY;
-      });
-
-      // 输入检测
-      var pwdInput = $("login-pwd");
-      pwdInput.addEventListener("input", function() {
-        isTyping = true;
-        clearTimeout(typingTimer);
-        typingTimer = setTimeout(function() { isTyping = false; }, 1500);
-      });
-
-      // 瞨眼
-      function scheduleBlink(charId) {
-        var delay = 3000 + Math.random() * 4000;
-        blinkTimers[charId] = setTimeout(function() {
-          var eyes = document.querySelectorAll("#char-" + charId + " .eye");
-          eyes.forEach(function(el) { el.style.height = "2px"; });
-          setTimeout(function() {
-            eyes.forEach(function(el) { el.style.height = ""; });
-            scheduleBlink(charId);
-          }, 150);
-        }, delay);
-      }
-      scheduleBlink("purple");
-      scheduleBlink("black");
-
-      // 计算瞳孔位置
-      function getPupilPos(el, maxDist) {
-        var rect = el.getBoundingClientRect();
-        var cx = rect.left + rect.width / 2;
-        var cy = rect.top + rect.height / 2;
-        var dx = mouseX - cx, dy = mouseY - cy;
-        var dist = Math.min(Math.sqrt(dx*dx + dy*dy), maxDist);
-        var angle = Math.atan2(dy, dx);
-        return { x: Math.cos(angle) * dist, y: Math.sin(angle) * dist };
-      }
-
-      // 动画循环
-      function animate() {
-        var purpleEl = $("char-purple");
-        var blackEl = $("char-black");
-        var orangeEl = $("char-orange");
-        var yellowEl = $("char-yellow");
-
-        if (!purpleEl || $("login-page").style.display === "none") return;
-
-        // 瞳孔追踪
-        document.querySelectorAll('[data-char]').forEach(function(pupil) {
-          var char = pupil.getAttribute("data-char");
-          var maxDist = char === "purple" ? 5 : char === "black" ? 4 : 5;
-          var parent = pupil.classList.contains("eye-pupil") ? pupil.parentElement : pupil;
-          var pos = getPupilPos(parent, maxDist);
-          pupil.style.transform = "translate(" + pos.x + "px," + pos.y + "px)";
-        });
-
-        // 身体倾斜
-        var stageRect = $("stage").getBoundingClientRect();
-        var stageCX = stageRect.left + stageRect.width / 2;
-        var dx = mouseX - stageCX;
-
-        var skew = Math.max(-6, Math.min(6, dx / 120));
-        purpleEl.style.transform = "skewX(" + (skew - 2) + "deg)";
-        blackEl.style.transform = "skewX(" + (skew * 1.2) + "deg)";
-        orangeEl.style.transform = "skewX(" + (skew * 0.5) + "deg)";
-        yellowEl.style.transform = "skewX(" + (skew * 0.8) + "deg)";
-
-        // 输入时角色互相看
-        if (isTyping) {
-          purpleEl.style.transform = "skewX(-12deg) translateX(30px)";
-          blackEl.style.transform = "skewX(10deg) translateX(15px)";
-        }
-
-        requestAnimationFrame(animate);
-      }
-      requestAnimationFrame(animate);
-    })();
+    fetch('/posts.json').then(function(r){return r.json()}).then(function(data){
+      var el = $("stat-posts");
+      if (el && Array.isArray(data)) el.textContent = data.length;
+    }).catch(function(){});
   </script>
 </body>
 </html>

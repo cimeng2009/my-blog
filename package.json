@@ -15,7 +15,10 @@
     "lint": "biome check --write ./src",
     "preinstall": "npx only-allow pnpm",
     "icons": "node scripts/generate-icons.js",
-    "build-index": "node scripts/build-vectorize-index.js"
+    "build-index": "node scripts/build-vectorize-index.js",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.8",
