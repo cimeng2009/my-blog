@@ -363,6 +363,24 @@ export const friendsConfig: FriendLink[] = [
 		weight: 10,
 		enabled: true,
 	},
+	{
+		title: "gc的小站",
+		imgurl: "https://www.gcweb.cc/static/img/pig.jpg",
+		desc: "综合性网站，希望对你有帮助",
+		siteurl: "https://gcweb.cc",
+		tags: ["Blog"],
+		weight: 10,
+		enabled: true,
+	},
+	{
+		title: "他说",
+		imgurl: "https://090909.top/assets/images/logo.ico",
+		desc: "梁栋烨的博客网站。",
+		siteurl: "https://090909.top/",
+		tags: ["Blog"],
+		weight: 10,
+		enabled: true,
+	},
 ];
 
 // 获取启用的友链并进行排序

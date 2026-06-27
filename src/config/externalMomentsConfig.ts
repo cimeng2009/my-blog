@@ -13,8 +13,8 @@ export const externalMomentsConfig = {
 	fileName: "moments.json",
 
 	// 默认作者信息
-	defaultAuthor: "团子",
-	defaultAvatar: "https://re.tsh520.cn/zl/tx.webp",
+	defaultAuthor: "fqzlr",
+	defaultAvatar: "https://q1.qlogo.cn/g?b=qq&nk=20447289&s=640",
 
 	// ========================================================================
 	// 后台管理登录密码配置
