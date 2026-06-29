@@ -13,14 +13,14 @@ export const siteConfig: SiteConfig = {
 	subtitle: "Fqzlr",
 
 	// 站点 URL
-	site_url: "https://cimeng.com",
+	site_url: "https://opilmeng.xyz",
 
 	// 站点描述
 	description: "fqzlr的个人技术博客，专注NAS分享、AI实践、学习笔记与技术总结，与个人成长分享。",
 
 	// 站点关键词
 	keywords: [
-		"fqzlr",
+		"辞梦",
 		"JAVA",
 		"AI",
 		"Astro",
@@ -119,7 +119,7 @@ export const siteConfig: SiteConfig = {
 			alt: "logo",
 		},
 		// 导航栏标题
-		title: "Fqzlr的博客",
+		title: "CIMENGCIMENG的博客",
 		// 全宽导航栏，导航栏是否占满屏幕宽度
 		widthFull: false,
 		// 导航菜单对齐方式，left：左对齐，center：居中
