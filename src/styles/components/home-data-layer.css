@@ -711,6 +711,63 @@
 	color: var(--data-card-bg);
 }
 
+.social-links-list {
+	display: flex;
+	align-items: center;
+	gap: 0.85rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.social-links-item {
+	flex: 0 0 auto;
+}
+
+.social-links-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.65rem;
+	min-height: calc(34px + 1rem);
+	padding: 0.58rem 1rem;
+	border: 2px solid var(--data-card-border);
+	border-radius: 999px;
+	background: var(--data-card-bg);
+	color: var(--data-card-fg);
+	text-decoration: none;
+	font-weight: 900;
+	line-height: 1;
+	white-space: nowrap;
+	transition:
+		background-color 160ms ease,
+		color 160ms ease,
+		transform 160ms ease;
+}
+
+.social-links-link:hover,
+.social-links-link:focus-visible {
+	background: var(--data-card-fg);
+	color: var(--data-card-bg);
+	transform: translateY(-2px);
+	outline: 0;
+}
+
+.social-links-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1em;
+	height: 1em;
+	font-size: 34px;
+	line-height: 1;
+}
+
+.social-links-label {
+	font-size: clamp(0.8rem, 0.95vw, 0.95rem);
+}
+
 @media (max-width: 1024px) {
 	.home-data-layer {
 		padding-inline: clamp(1rem, 3vw, 2rem);

@@ -1,6 +1,7 @@
 ---
 import DataMetricCard from "@components/features/DataMetricCard.astro";
 import LogoLoop from "@components/features/LogoLoop.svelte";
+import Icon from "@components/common/Icon.astro";
 import { profileConfig, siteConfig, skillsConfig } from "@/config";
 import {
 	getCategoryList,
@@ -106,18 +107,22 @@ const statsShareId = umamiConfig?.shareId ?? "";
 						</div>
 					</div>
 					<div class="data-band__loop">
-						<LogoLoop
-							client:load
-							items={socialItems}
-							speed={86}
-							logoHeight={34}
-							gap={18}
-							hoverSpeed={0}
-							fadeOut
-							ariaLabel="社交联系方式"
-							clickable
-							showLabel
-						/>
+						<ul class="social-links-list">
+							{socialItems.map((item) => (
+								<li class="social-links-item">
+									<a
+										href={item.href}
+										target={item.href?.startsWith("http") ? "_blank" : undefined}
+										rel={item.href?.startsWith("http") ? "noreferrer noopener" : undefined}
+										aria-label={item.ariaLabel || item.name}
+										class="social-links-link"
+									>
+										<Icon name={item.icon} class="social-links-icon" />
+										<span class="social-links-label">{item.name}</span>
+									</a>
+								</li>
+							))}
+						</ul>
 					</div>
 				</section>
 			</div>
