@@ -41,7 +41,7 @@ export const sponsorConfig: SponsorConfig = {
 		},
 		{
 			name: "把你所有的钱都给我",
-			icon: "fa7-brands:wechat-pay",
+			icon: "material-symbols:chat-bubble",
 			// 收款码图片路径（需要放在 public 目录下）/assets/images/alipay.webp
 			qrCode: "/assets/images/wechat-pay.webp",
 			link: "",
