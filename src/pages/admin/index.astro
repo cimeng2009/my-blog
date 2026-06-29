@@ -427,6 +427,9 @@ import { siteConfig } from "@/config/siteConfig";
       margin-bottom: 1px;
       position: relative;
       cursor: pointer;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .nav-link:hover {
@@ -760,23 +763,43 @@ import { siteConfig } from "@/config/siteConfig";
       .sidebar {
         transform: translateX(-100%);
         box-shadow: var(--shadow-lg);
+        width: 260px;
+        overflow-x: hidden;
       }
       .sidebar.open { transform: translateX(0); }
       .sidebar-overlay.open { display: block; }
-      .main { margin-left: 0; }
+      .main { margin-left: 0; overflow-x: hidden; }
       .content { padding: 16px; }
       .topbar { padding: 0 16px; }
       .menu-toggle { display: flex; }
       .stats-row { grid-template-columns: repeat(2, 1fr); gap: 12px; }
       .stat-card { padding: 16px; }
-      .stat-num { font-size: 22px; }
+      .stat-num { font-size: 20px; }
       .cards-grid { grid-template-columns: 1fr; }
       .login-box { padding: 28px 24px; }
       .topbar-title small { display: none; }
+      .nav-link { font-size: 14px; padding: 10px 12px; }
+      .nav-label { font-size: 10px; padding: 6px 12px 4px; }
+      .sidebar-name { font-size: 14px; }
+      .sidebar-sub { font-size: 10px; }
+      .sidebar-user-name { font-size: 12px; }
+      .sidebar-user-role { font-size: 10px; }
     }
 
     @media (max-width: 480px) {
       .stats-row { grid-template-columns: 1fr; }
+      .stat-num { font-size: 18px; }
+      .stat-card { padding: 14px; }
+      .nav-link { font-size: 13px; gap: 8px; }
+      .nav-link-icon { width: 18px; height: 18px; font-size: 14px; }
+    }
+
+    @media (max-width: 375px) {
+      .stat-num { font-size: 16px; }
+      .stat-label { font-size: 12px; }
+      .stat-ico { width: 32px; height: 32px; font-size: 16px; }
+      .topbar-title { font-size: 14px; }
+      .nav-link { font-size: 12px; padding: 8px 10px; }
     }
   </style>
 </head>

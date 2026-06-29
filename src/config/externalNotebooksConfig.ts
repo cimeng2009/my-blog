@@ -75,7 +75,7 @@ export const externalNotebooksConfig = {
 
 	// 后台登录密码的 SHA-256 哈希（与说说后台共用同一密码）
 	adminPasswordHash:
-		"837b518a396d573ec995f128e2191865ea48c9250585db62718b94463163196c",
+		"240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9",
 
 	// GitHub Token（优先从环境变量 GITHUB_TOKEN 读取）
 	githubToken: process.env.GITHUB_TOKEN || "",
