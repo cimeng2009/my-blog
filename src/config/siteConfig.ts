@@ -13,7 +13,7 @@ export const siteConfig: SiteConfig = {
 	subtitle: "Fqzlr",
 
 	// 站点 URL
-	site_url: "https://opilmeng.xyz",
+	site_url: "https://cimeng.com",
 
 	// 站点描述
 	description: "fqzlr的个人技术博客，专注NAS分享、AI实践、学习笔记与技术总结，与个人成长分享。",
