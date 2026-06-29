@@ -22,14 +22,6 @@ export const sponsorConfig: SponsorConfig = {
 	// 赞助方式列表
 	methods: [
 		{
-			name: "爱发电",
-			icon: "simple-icons:afdian",
-			qrCode: "",
-			link: "https://ifdian.net/a/fqzlr",
-			description: "通过 爱发电 进行打赏",
-			enabled: true,
-		},
-		{
 			name: "微信支付",
 			icon: "fa7-brands:weixin",
 			// 收款码图片路径（需要放在 public 目录下）
@@ -43,6 +35,15 @@ export const sponsorConfig: SponsorConfig = {
 			icon: "fa7-brands:alipay",
 			// 收款码图片路径（需要放在 public 目录下）/assets/images/alipay.webp
 			qrCode: "/assets/images/alipay.png",
+			link: "",
+			description: "",
+			enabled: true,
+		},
+		{
+			name: "把你所有的钱都给我",
+			icon: "fa7-brands:wechat-pay",
+			// 收款码图片路径（需要放在 public 目录下）/assets/images/alipay.webp
+			qrCode: "/assets/images/wechat-pay.webp",
 			link: "",
 			description: "",
 			enabled: true,
