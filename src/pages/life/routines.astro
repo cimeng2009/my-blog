@@ -10,12 +10,15 @@ const filteredEntries = routinesEntries.filter(
 );
 
 const sortedEntries = [...filteredEntries].sort((a, b) => {
-	const aTime = a.data.updatedAt?.getTime() || 0;
-	const bTime = b.data.updatedAt?.getTime() || 0;
-	return bTime - aTime;
+	const aDate = a.data.updatedAt instanceof Date ? a.data.updatedAt : new Date(a.data.updatedAt || 0);
+	const bDate = b.data.updatedAt instanceof Date ? b.data.updatedAt : new Date(b.data.updatedAt || 0);
+	return bDate.getTime() - aDate.getTime();
 });
 
-const lastUpdated = sortedEntries.find((e) => e.data.updatedAt)?.data.updatedAt;
+const lastUpdatedEntry = sortedEntries.find((e) => e.data.updatedAt);
+const lastUpdated = lastUpdatedEntry?.data.updatedAt instanceof Date 
+	? lastUpdatedEntry.data.updatedAt 
+	: new Date(lastUpdatedEntry?.data.updatedAt || 0);
 
 const entriesWithContent = await Promise.all(
 	sortedEntries.map(async (entry) => {

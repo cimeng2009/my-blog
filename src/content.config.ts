@@ -22,6 +22,7 @@ const postsCollection = defineCollection({
 		comment: z.boolean().optional().default(true),
 		order: z.number().optional().default(0),
 		password: z.string().optional().default(""),
+		passwordHint: z.string().optional().default(""),
 
 		/* For internal use */
 		prevTitle: z.string().default(""),
@@ -115,6 +116,7 @@ const lifeCollection = defineCollection({
 		// Place
 		province: z.string().optional().default(""),
 		city: z.string().optional().default(""),
+		district: z.string().optional().default(""),
 		experience: z.string().optional().default(""),
 		visitCount: z.number().optional().default(1),
 		lat: z.number().optional(),

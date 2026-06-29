@@ -3,9 +3,9 @@
 import "@fontsource-variable/jetbrains-mono";
 
 interface Props {
-	class: string;
+	class?: string;
 }
-const className = Astro.props.class;
+const className = Astro.props.class || "";
 ---
 <div data-pagefind-body class={`prose dark:prose-invert max-w-none! custom-md ${className}`}>
     <slot/>

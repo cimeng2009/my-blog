@@ -166,6 +166,12 @@ export type SiteConfig = {
 	// 公安网备号配置（留空则不显示）
 	policeBeian?: string;
 
+	// 动态页面封面配置
+	momentsCover?: {
+		enable: boolean;
+		image: string;
+	};
+
 	// 热力图配置
 	heatmap?: {
 		github?: {

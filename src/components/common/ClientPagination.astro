@@ -6,11 +6,12 @@ import { i18n } from "@/i18n/translation";
 interface Props {
 	totalItems: number;
 	itemsPerPage: number;
+	itemsPerPageMobile?: number;
 	currentPage: number;
 	sectionId: string;
 }
 
-const { totalItems, itemsPerPage, currentPage, sectionId } = Astro.props;
+const { totalItems, itemsPerPage, itemsPerPageMobile, currentPage, sectionId } = Astro.props;
 const totalPages = Math.ceil(totalItems / itemsPerPage);
 
 // 生成智能分页页码数组

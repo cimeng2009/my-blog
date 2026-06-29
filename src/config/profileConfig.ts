@@ -12,10 +12,10 @@ export const profileConfig: ProfileConfig = {
 	avatarOffWork: "assets/images/xiaban.gif",
 
 	// 名字
-	name: "Fqzlr",
+	name: "辞梦",
 
 	// 首页展示名字（留空则使用 name）
-	displayName: "Fqzlrの博客",
+	displayName: "CIMENGの博客",
 
 	// 名字右侧徽章文字（如 QQ 号）
 	nameBadge: "B站：番茄煮理人",
@@ -34,9 +34,9 @@ export const profileConfig: ProfileConfig = {
 	// showName: true 时显示图标和名称，false 时只显示图标
 	links: [
 		{
-			name: "qq群",
+			name: "QQ",
 			icon: "fa7-brands:qq",
-			url: "https://qm.qq.com/q/wrmF4FI9pu",
+			url: "https://qm.qq.com/q/2450225459",
 			showName: false,
 		},
 		{
@@ -48,26 +48,14 @@ export const profileConfig: ProfileConfig = {
 		{
 			name: "GitHub",
 			icon: "fa7-brands:github",
-			url: "https://github.com/fqzlr",
+			url: "https://github.com/cimeng",
 			showName: false,
 		},
 		{
 			name: "Email",
 			icon: "fa7-solid:envelope",
-			url: "mailto:fqzlr@outlook.com",
+			url: "mailto:cimeng@outlook.com",
 			showName: false,
-		},
-		{
-			name: "RSS",
-			icon: "fa7-solid:rss",
-			url: "/rss/",
-			showName: false,
-		},
-		{
-			name: "my home",
-			url: "https://home.fqzlr.com",
-			icon: "fa7-solid:house-chimney",
-			showName: false,
-		},
+	    },
 	],
 };

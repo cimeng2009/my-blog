@@ -8,7 +8,7 @@ import { externalBangumiConfig } from "@/config/externalBangumiConfig";
 import I18nKey from "@/i18n/i18nKey";
 import { i18n } from "@/i18n/translation";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
-import type { UserSubjectCollection } from "@/types/bangumi";
+import type { UserSubjectCollection, SubjectType } from "@/types/bangumi";
 import { formatDateI18nWithTime } from "@/utils/date-utils";
 import { removeFileExtension } from "@/utils/url-utils";
 
@@ -85,7 +85,7 @@ const mappedData: UserSubjectCollection[] = customBangumi.map((item) => {
 
 	return {
 		subject_id: 0,
-		subject_type: categoryInfo.subjectType,
+		subject_type: categoryInfo.subjectType as SubjectType,
 		rate: data.score || 0,
 		type: data.status as any,
 		comment: data.comment || null,
@@ -97,7 +97,7 @@ const mappedData: UserSubjectCollection[] = customBangumi.map((item) => {
 		link: finalLink,
 		subject: {
 			id: 0,
-			type: categoryInfo.subjectType,
+			type: categoryInfo.subjectType as SubjectType,
 			name: data.title,
 			name_cn: data.name_cn || data.title,
 			short_summary: "",

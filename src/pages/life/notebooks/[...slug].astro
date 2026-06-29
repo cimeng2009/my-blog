@@ -16,7 +16,16 @@ const notebookImageFiles = import.meta.glob<ImageMetadata>(
 
 export async function getStaticPaths() {
 	const allEntries = await getCollection("notebooks");
-	const paths = [];
+	const paths = [] as Array<{
+		params: { slug: string };
+		props: {
+			entry: typeof allEntries[0];
+			entries?: typeof allEntries;
+			sortedEntries?: typeof allEntries;
+			item?: typeof allEntries[0];
+			isNotebookIndex: boolean;
+		};
+	}>;
 
 	for (const entry of allEntries) {
 		const normalizedId = entry.id.replace(/\\/g, "/");
@@ -67,8 +76,8 @@ export async function getStaticPaths() {
 	return paths;
 }
 
-const { entry, entries, sortedEntries, item, isNotebookIndex } = Astro.props;
-const notebookContent = !isNotebookIndex ? await render(item) : null;
+const { entry, entries = [], sortedEntries = [], item, isNotebookIndex } = Astro.props;
+const notebookContent = !isNotebookIndex && item ? await render(item) : null;
 const normalizedEntryId = entry.id.replace(/\\/g, "/");
 const isNotebookRootMatch =
 	normalizedEntryId.match(/^([^/]+)\/(_index|_index\.md|_index\.json)$/) ||
@@ -100,7 +109,7 @@ if (rawCover) {
 	}
 }
 
-const notebookCommentPath = !isNotebookIndex
+const notebookCommentPath = !isNotebookIndex && item
 	? `/life/notebooks/${item.id.replace(/\\/g, "/").replace(/\.md$/, "")}/`
 	: "";
 
@@ -179,7 +188,7 @@ const sortedEntriesWithImages = isNotebookIndex
 							const fileName = noteItemId.split("/").pop()?.replace(/\.md$/, "") || "未命名";
 							const itemSlug = fileName;
 							const contentBody = noteItem.body ? noteItem.body.split("\n").filter((line: string) => !line.trim().startsWith("---")).join("\n").trim() : "";
-							const htmlPreview = contentBody ? marked.parse(contentBody.slice(0, 300), { mangle: false, headerIds: false }) : "";
+							const htmlPreview = contentBody ? (marked.parse(contentBody.slice(0, 300)) as string) : "";
 							const previewHtml = htmlPreview
 									.replace(/<\/p>\s*<p>/g, '<br>')
 									.replace(/<\/?p>/g, '')
@@ -288,8 +297,8 @@ const sortedEntriesWithImages = isNotebookIndex
 			)}
 		</div>
 	</MainGridLayout>
-) : (
-	<MainGridLayout title={item.data.name || item.data.title || "日记"}>
+) : item ? (
+	<MainGridLayout title={item.data.name || "日记"}>
 		<div class="diary-detail-page">
 			<article class="diary-paper">
 				<a href={`/life/notebooks/${folderName}/`} class="diary-paper-back">
@@ -298,7 +307,7 @@ const sortedEntriesWithImages = isNotebookIndex
 				</a>
 
 				<h1 class="diary-paper-title">
-					{item.data.name || item.data.title || item.id.replace(/\\/g, "/").split("/").pop()?.replace(/\.md$/, "") || "无标题"}
+					{item.data.name || item.id.replace(/\\/g, "/").split("/").pop()?.replace(/\.md$/, "") || "无标题"}
 				</h1>
 
 				<div class="diary-paper-content">
@@ -324,7 +333,7 @@ const sortedEntriesWithImages = isNotebookIndex
 			<Comment customPath={notebookCommentPath} />
 		</div>
 	</MainGridLayout>
-)}
+) : null}
 
 <style>
 	/* Hero 左上角返回链接 */
