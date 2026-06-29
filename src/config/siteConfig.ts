@@ -194,7 +194,7 @@ export const siteConfig: SiteConfig = {
 		// 动态页面开关
 		moments: true,
 		// 后台管理页面开关
-		admin: false,
+		admin: true,
 		// 日常规划页面开关
 		lifeRoutines: true,
 		// 旅行足迹页面开关

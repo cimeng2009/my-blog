@@ -85,6 +85,9 @@ const buildNavBarConfig = (): NavBarConfig => {
 	if (siteConfig.pages.sponsor) {
 		myChildren.push(LinkPreset.Sponsor);
 	}
+	if (siteConfig.pages.admin) {
+		myChildren.push(LinkPreset.Admin);
+	}
 	myChildren.push(LinkPreset.About);
 
 	const myNav: NavBarLink = {
