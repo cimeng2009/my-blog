@@ -241,9 +241,9 @@ export const siteConfig: SiteConfig = {
 		microsoftClarityId: "",
 		// Umami 统计配置
 		umamiAnalytics: {
-			websiteId: "4f4d87b0-bf0f-403a-a7c1-71962537673a",
-			shareId: "kHCJG2ZUL1r6q5Js",
-			scriptUrl: "https://umami.fqzlr.com/script.js",
+			websiteId: "7a32af96-e86b-40f1-a8ce-b38fe64e987c",
+			shareId: "oplmeng.xyz",
+			scriptUrl: "https://cloud.umami.is/script.js",
 			// 是否追踪出站链接
 			trackOutboundLinks: true,
 			// 是否收集浏览器性能指标

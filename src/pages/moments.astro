@@ -66,9 +66,8 @@ const pinnedData = pinnedMoments.map((m) => ({
 	body: m.body || "",
 	date: m.data.published,
 }));
-
-const albums = await getCollection("album");
 ---
+const albums = await getCollection("album");
 
 <MainGridLayout title="动态" description="记录生活中的点点滴滴">
   <!-- 微信朋友圈风格封面 -->

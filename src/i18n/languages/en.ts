@@ -361,6 +361,7 @@ export const en: Translation = {
 	// Calendar page
 	[Key.calendar]: "Calendar",
 	[Key.Fhome]: "Fhome",
+	[Key.Fnote]: "Fnote",
 	[Key.contactMe]: "Contact Me",
 	[Key.qqGroup]: "QQ Group",
 	[Key.navPosts]: "Posts",
